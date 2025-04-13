@@ -5,6 +5,9 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import ThemeProvider from "@/components/ThemeProvider/ThemeProvider";
 import NextAuthProvider from "@/components/AuthProvider/AuthProvider";
+import { Suspense } from 'react';
+
+
 const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
@@ -14,7 +17,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Munawara Hotel Management System",
+  title: "Munawara ",
   description: "A hotel management system for Munawara Hotel",
   icons: {
     icon: "/favicon.ico",
@@ -22,8 +25,8 @@ export const metadata: Metadata = {
     apple: "/favicon.ico",
   },
   openGraph: {
-    title: "Munawara Hotel Management System",
-    description: "A hotel management system for Munawara Hotel",
+    title: "Munawara main page",
+    description: "Munawara digital service",
     url: "https://munawarahotel.com",
     siteName: "Munawara",
   },
@@ -36,13 +39,16 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <ThemeProvider>
         <body className={poppins.className}>
-          <NextAuthProvider>
-            <main className="flex flex-col min-h-screen">
-              <Header />
-              {children}
-              <Footer />
-            </main>
-          </NextAuthProvider>
+          <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
+            <NextAuthProvider>
+              <main className="flex flex-col min-h-screen">
+                <Header />
+
+                {children}
+                <Footer />
+              </main>
+            </NextAuthProvider>
+          </Suspense>
         </body>
       </ThemeProvider>
     </html>

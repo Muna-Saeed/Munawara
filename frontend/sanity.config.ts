@@ -5,13 +5,13 @@ import { schemaTypes } from './schemaTypes'
 
 export default defineConfig({
   name: 'default',
-  title: 'Munawara-main-site',
+  title: 'munawara',
 
-  projectId: '1i8v3wtu',
-  dataset: 'production',
-  base: '/studio',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID as string,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET as string,
 
   plugins: [structureTool(), visionTool()],
+  basePath: '/studio',
 
   schema: {
     types: schemaTypes,

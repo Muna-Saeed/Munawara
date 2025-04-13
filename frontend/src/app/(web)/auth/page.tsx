@@ -6,6 +6,8 @@ import { signUp } from "next-auth-sanity/client";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter, useSearchParams } from "next/navigation";
+export const dynamic = 'force-dynamic';
+
 
 const inputStyle = `
     mt-1 block w-full px-3 py-2 border border-gray-300 shadow-sm dark:bg-gray-800
