@@ -25,7 +25,7 @@ export default function Hero() {
         {/* Call to Action Buttons */}
         <div className="mt-6 flex gap-4">
           <button className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-500 transition duration-300">
-            Start Today
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLScI4A5j50eCKdTn3FPl9VxreHgOuRp4Wk3SupE_ltr8u70gMQ/viewform">Start Today</a>
           </button>
           <button className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-500 transition duration-300">
             Learn More
