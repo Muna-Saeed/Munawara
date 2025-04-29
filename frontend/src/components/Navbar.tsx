@@ -4,7 +4,7 @@ export default function Navbar() {
     <nav className="p-4 bg-gray-900 text-white flex justify-between">
        <div className="flex items-center justify-center mb-2">
         <img
-          src="/logo.png"
+          src="/l.png"
           alt="Munawara Logo"
           className="w-10 h-10 rounded-full shadow-lg"
         />

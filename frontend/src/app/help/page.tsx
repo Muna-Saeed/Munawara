@@ -171,9 +171,6 @@ export default function Help() {
           <p className="text-lg">For more information, visit our <a href="/faq" className="text-sky-800 hover:underline">FAQ</a> page.</p>
       </div>
     </div>
-        
-
-
       </section>
     );
   }

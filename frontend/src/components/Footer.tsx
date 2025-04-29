@@ -22,13 +22,13 @@ export default function Footer() {
                 <Image src="/icons/facebook.svg" alt="Facebook" width={32} height={32} />
               </a>
               <a href="https://instagram.com/munawara" target="_blank" rel="noopener noreferrer">
-                <Image src="/icons/instagram.svg" alt="Instagram" width={32} height={32} />
+                <Image src="/icons/instagram.svg" alt="Instagram" width={34} height={34} />
               </a>
               <a href="https:/linkedin.com/munawara" target="_blank" rel="noopener noreferrer">
-                <Image src="/icons/linkedin.svg" alt="linkedin" width={34} height={34} />
+                <Image src="/icons/linkedin.svg" alt="linkedin" width={32} height={32} />
               </a>
               <a href="https://x.com/munawara" target="_blank" rel="noopener noreferrer">
-                <Image src="/icons/X.svg" alt="Twitter" width={32} height={32} />
+                <Image src="/icons/X.svg" alt="Twitter" width={34} height={34} />
               </a>
             </div>
           </div>
@@ -66,7 +66,7 @@ export default function Footer() {
             <h3 className="text-lg font-semibold">Questions?</h3>
             <ul className="mt-2 space-y-2 text-gray-400">
               <li><a href="/FAQ" className="hover:text-gray-200">FAQ</a></li>
-              <li><a href="/Help" className="hover:text-gray-200">Help</a></li>
+              <li><a href="/help" className="hover:text-gray-200">Help</a></li>
             </ul>
           </div>
           <div>
