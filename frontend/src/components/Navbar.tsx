@@ -1,4 +1,6 @@
 // frontend/components/Navbar.tsx
+import Link from "next/link";
+import link from "next/link";
 export default function Navbar() {
   return (
     <nav className="p-4 bg-gray-900 text-white flex justify-between">
@@ -13,7 +15,7 @@ export default function Navbar() {
 
       <div>
         <ul className="flex space-x-4 text-lg font-semibold  text-gray-400">
-            <li><a href="/" className="hover:text-white">Home</a></li>
+            <li><Link href="/" className="hover:text-white">Home</Link></li>
             <li><a href="/services" className="hover:text-white">Services</a></li>
             <li><a href="/about" className="hover:text-white">About</a></li>
             <li><a href="/blog" className="hover:text-white">Blog</a></li>
