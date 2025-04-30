@@ -9,12 +9,8 @@ export default function ForgetPassword() {
         <p className="text-lg text-gray-700 mb-4">
           Please enter your email address below, and we'll send you a link to reset your password.
         </p>
-
-        <p className="text-lg text-gray-700 mb-4">
-          Enter your email below and we’ll send you a link to reset your password.
-        </p>
         <form>
-          <label className="block mb-2 text-lg">Email</label>
+          <label className="block mb-2 text-lg text-black">Email</label>
           <input
             type="email"
             className="w-full p-2 border rounded mb-4"
@@ -36,24 +32,12 @@ export default function ForgetPassword() {
             If you are having trouble, please <a href="/help" className="text-sky-800 hover:underline">visit our help center</a>.
           </p>
 
-          
-        <p className="text-lg text-gray-700 mb-4">
-          If you have any questions or need further assistance, feel free to reach out to our support team.
-        </p>
-        <p className="text-lg text-gray-700 mb-4">
-          Your security is our top priority, and we take it seriously. Rest assured that your information is safe with us.
-        </p>
-          
-
         </form>
         <p className="text-center text-gray-700 mt-4">
           Remembered your password? <a href="/login" className="text-sky-800 hover:underline">Login</a>
         </p>
         <p className="text-center text-gray-700 mt-4">
           Don't have an account? <a href="/register" className="text-sky-800 hover:underline">Sign Up</a>
-        </p>
-        <p className="text-center text-gray-700 mt-4">
-          By signing up, you agree to our <a href="/terms" className="text-sky-800 hover:underline">Terms of Service</a> and <a href="/privacy" className="text-sky-800 hover:underline">Privacy Policy</a>.
         </p>
       </div>
     </section>
