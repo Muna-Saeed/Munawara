@@ -1,11 +1,15 @@
+import Image from "next/image";
+
 export default function Hero() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center px-6 py-12 bg-gray-100">
       {/* Left Column - Image */}
       <div className="flex justify-center">
-        <img
+        <Image
           src="/l.png"
           alt="Empowering Small Businesses in the Digital Age"
+          width={400}
+          height={400}
           className="w-full max-w-sm rounded-lg shadow-lg"
         />
       </div>
@@ -16,8 +20,8 @@ export default function Hero() {
           Empower Your Business
         </h1>
         <p className="text-lg text-gray-700 mb-4">
-        Welcome to Munawara, where creativity meets technology. Explore modern web development and innovative solutions.
-       </p>
+          Welcome to Munawara, where creativity meets technology. Explore modern web development and innovative solutions.
+        </p>
         <p className="text-lg text-gray-700 mb-4">
           Get affordable and scalable digital solutions tailored for small businesses, entrepreneurs, and professionals to help grow and manage your venture.
         </p>
