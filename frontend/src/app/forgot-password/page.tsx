@@ -4,9 +4,6 @@ export default function ForgetPassword() {
       <div className="w-full max-w-md bg-white p-8 rounded shadow-lg">
         <h1 className="text-4xl font-bold text-black mb-6">Reset Your Password</h1>
         <p className="text-lg text-gray-700 mb-4">
-          We understand that forgetting your password can be frustrating. But don't worry, we're here to help you get back on track!
-        </p>
-        <p className="text-lg text-gray-700 mb-4">
           Please enter your email address below, and we'll send you a link to reset your password.
         </p>
         <form>
