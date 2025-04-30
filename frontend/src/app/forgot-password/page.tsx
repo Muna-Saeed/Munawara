@@ -25,18 +25,6 @@ export default function ForgetPassword() {
           <p className="text-sm text-gray-500 mt-2">
             If you have any questions or need further assistance, feel free to <a href="/contact" className="text-sky-800 hover:underline">contact us</a>.
           </p>
-          <p className="text-sm text-gray-500 mt-2">
-            If you are having trouble, please <a href="/help" className="text-sky-800 hover:underline">visit our help center</a>.
-          </p>
-
-          
-        <p className="text-lg text-gray-700 mb-4">
-          If you have any questions or need further assistance, feel free to reach out to our support team.
-        </p>
-        <p className="text-lg text-gray-700 mb-4">
-          Your security is our top priority, and we take it seriously. Rest assured that your information is safe with us.
-        </p>
-          
 
         </form>
         <p className="text-center text-gray-700 mt-4">
