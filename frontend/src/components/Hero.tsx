@@ -6,34 +6,36 @@ export default function Hero() {
       {/* Left Column - Image */}
       <div className="flex justify-center">
         <Image
-          src="/l.png"
+          src="/logo.png"
           alt="Empowering Small Businesses in the Digital Age"
           width={400}
           height={400}
           className="w-full max-w-sm rounded-lg shadow-lg"
         />
       </div>
-
       {/* Right Column - Text Content */}
       <div>
-        <h1 className="text-4xl font-bold text-gray-900 mb-6">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
           Empower Your Business
         </h1>
-        <p className="text-lg text-gray-700 mb-4">
-          Welcome to Munawara, where creativity meets technology. Explore modern web development and innovative solutions.
+        <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-xl">
+          Get affordable and scalable digital solutions tailored for small
+          businesses, entrepreneurs, and professionals to help grow and manage
+          your venture.
         </p>
-        <p className="text-lg text-gray-700 mb-4">
-          Get affordable and scalable digital solutions tailored for small businesses, entrepreneurs, and professionals to help grow and manage your venture.
-        </p>
-
-        {/* Call to Action Buttons */}
-        <div className="mt-6 flex gap-4">
-          <button className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-500 transition duration-300">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLScI4A5j50eCKdTn3FPl9VxreHgOuRp4Wk3SupE_ltr8u70gMQ/viewform">Start Today</a>
-          </button>
-          <button className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-500 transition duration-300">
+        <div className="flex gap-4">
+          <a
+            href="/services"
+            className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
+          >
+            Start Today
+          </a>
+          <a
+            href="/about"
+            className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
+          >
             Learn More
-          </button>
+          </a>
         </div>
       </div>
     </div>

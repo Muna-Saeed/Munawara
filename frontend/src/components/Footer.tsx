@@ -10,25 +10,25 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-center md:text-left">
             <Image
-              src="/l.png"
-              alt="Munawara Logo"
+              src="/logo.png"
+              alt="Munawara company logo, circular"
               width={80}
               height={80}
               className="rounded-full shadow-lg mb-2"
             />
             <h3 className="text-lg font-semibold">Get in touch with Munawara</h3>
             <div className="flex justify-center md:justify-start gap-4 mt-4">
-              <a href="https://facebook.com/munawara" target="_blank" rel="noopener noreferrer">
-                <Image src="/icons/facebook.svg" alt="Facebook" width={32} height={32} />
+              <a href="https://facebook.com/munawara.tech" target="_blank" rel="noopener noreferrer">
+                <Image src="/icons/facebook.svg" alt="Facebook social media icon" width={32} height={32} />
               </a>
-              <a href="https://instagram.com/munawara" target="_blank" rel="noopener noreferrer">
-                <Image src="/icons/instagram.svg" alt="Instagram" width={34} height={34} />
+              <a href="https://instagram.com/munawara.tech" target="_blank" rel="noopener noreferrer">
+                <Image src="/icons/instagram.svg" alt="Instagram social media icon" width={32} height={32} />
               </a>
-              <a href="https:/linkedin.com/munawara" target="_blank" rel="noopener noreferrer">
-                <Image src="/icons/linkedin.svg" alt="linkedin" width={32} height={32} />
+              <a href="https://linkedin.com/company/munawara" target="_blank" rel="noopener noreferrer">
+                <Image src="/icons/linkedin.svg" alt="LinkedIn social media icon" width={32} height={32} />
               </a>
               <a href="https://x.com/munawara" target="_blank" rel="noopener noreferrer">
-                <Image src="/icons/X.svg" alt="Twitter" width={34} height={34} />
+                <Image src="/icons/X.svg" alt="X (formerly Twitter) social media icon" width={32} height={32} />
               </a>
             </div>
           </div>

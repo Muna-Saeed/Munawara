@@ -14,12 +14,12 @@ export default function Home() {
       <div className="mt-12 bg-white p-8 rounded shadow-md max-w-3xl">
         <h2 className="text-3xl font-semibold text-black">Start Your Digital Journey</h2>
         <p className="mt-4 text-lg text-black">
-          Transform your business with Munawara’s streamlined process:
+          Transform your business with Munawara&apos;s streamlined process:
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           {/* Sign Up */}
           <div className="p-4 border rounded flex flex-col items-center">
-            <Image src="/icons/signup.svg" alt="Sign Up" width={50} height={50} />
+            <Image src="/icons/signup.svg" alt="Sign up for a Munawara account" width={50} height={50} />
             <h3 className="text-xl font-semibold mt-4">Sign Up</h3>
             <p className="text-black text-center">
               Create your account in minutes with some basic information.
@@ -28,7 +28,7 @@ export default function Home() {
 
           {/* Select */}
           <div className="p-4 border rounded flex flex-col items-center">
-            <Image src="/icons/select.svg" alt="Select Services" width={50} height={50} />
+            <Image src="/icons/select.svg" alt="Select digital services from Munawara" width={50} height={50} />
             <h3 className="text-xl font-semibold mt-4">Select</h3>
             <p className="text-black text-center">
               Browse our catalog of digital services and pick what fits your needs.
@@ -37,7 +37,7 @@ export default function Home() {
 
           {/* Transform */}
           <div className="p-4 border rounded flex flex-col items-center">
-            <Image src="/icons/transform.svg" alt="Transform Business" width={50} height={50} />
+            <Image src="/icons/transform.svg" alt="Transform your business with Munawara" width={50} height={50} />
             <h3 className="text-xl font-semibold mt-4">Transform</h3>
             <p className="text-black text-center">
               Our expert team customizes the selected services and helps your business grow online.

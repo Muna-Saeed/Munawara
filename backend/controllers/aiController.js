@@ -1,20 +1,12 @@
-// aiController.js
-exports.getAIResponse = (req, res) => {
+// backend/controllers/aiController.js
+const { getChatbotResponse } = require("../../ai/chatbot/chatbot.js");
+
+exports.getAIResponse = async (req, res) => {
+  const userMessage = req.query.message || "";
+  const aiReply = await getChatbotResponse(userMessage);
   res.status(200).json({
     success: true,
-    message: "AI feature is under development. Stay tuned for updates!",
+    reply: aiReply,
     timestamp: new Date().toISOString(),
   });
 };
-
-
-const express = require('express');
-const { getAIResponse } = require('./aiController');
-
-const app = express();
-
-app.get('/ai', getAIResponse);
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});

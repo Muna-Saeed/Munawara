@@ -1,4 +1,7 @@
+"use client";
+
 import Image from 'next/image';
+import { signIn } from "next-auth/react";
 
 export default function Login() {
   return (
@@ -9,7 +12,7 @@ export default function Login() {
 
         {/* Login Form */}
         <div className="flex items-center justify-center mb-4">
-          <Image src="/l.png" alt="Logo" width={64} height={64} className="w-16 h-16 mr-2" />
+          <Image src="/logo.png" alt="Munawara company logo" width={64} height={64} className="w-16 h-16 mr-2" />
           <h1 className="text-3xl font-bold text-sky-800">Munawara</h1>
         </div>
         <p className="text-gray-700 mb-4">Login to your account</p>
@@ -29,21 +32,31 @@ export default function Login() {
             className="w-full p-2 border rounded mb-4"
             placeholder="Your Password"
           />
-
-          <button className="w-full px-4 py-2 bg-sky-800 text-white rounded hover:bg-sky-700">
+          <button className="w-full px-4 py-2 bg-sky-800 text-white rounded hover:bg-sky-700 transition duration-300">
             Login
           </button>
         </form>
 
         <p className="text-center text-gray-700 mb-4">or</p>
-        <button className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 mb-4">
+        <button
+          type="button"
+          onClick={() => signIn("google")}
+          className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 mb-4"
+        >
           Login with Google
         </button>
-        <button className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 mb-4">
+        <button
+          type="button"
+          onClick={() => signIn("github")}
+          className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 mb-4"
+        >
           Login with GitHub
         </button>
-
-        <button className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 mb-4">
+        <button
+          type="button"
+          onClick={() => signIn("facebook")}
+          className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 mb-4"
+        >
           Login with Facebook
         </button>
         <p className="text-center text-gray-700 mt-4">

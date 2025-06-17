@@ -4,14 +4,14 @@ export default function Portfolio() {
   return (
     <section className="p-8 bg-gray-100 text-gray-700">
       <h1 className="text-4xl font-bold text-black mb-6">Our Portfolio</h1>
-      <p className="text-lg mb-4">Check out some of the amazing projects we’ve worked on:</p>
+      <p className="text-lg mb-4">Check out some of the amazing projects we&apos;ve worked on:</p>
 
       <p className="text-lg mb-8">We take pride in our work and are always looking for new challenges.</p>
 
       {/* Portfolio Overview */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
-          <Image src="/portfolio-overview.jpg" alt="Portfolio Overview" width={64} height={64} className="rounded-full" />
+          <Image src="/portfolio-overview.jpg" alt="Circular portfolio overview image for Munawara" width={64} height={64} className="rounded-full" />
           <h2 className="text-2xl font-semibold">Portfolio Overview</h2>
         </div>
         <button className="px-4 py-2 bg-sky-800 text-white rounded hover:bg-sky-700">
@@ -48,7 +48,7 @@ export default function Portfolio() {
 
       {/* Portfolio Highlights */}
       <div className="flex items-center space-x-4 mb-8">
-        <Image src="/portfolio-highlight.jpg" alt="Portfolio Highlight" width={64} height={64} className="rounded-full" />
+        <Image src="/portfolio-highlight.jpg" alt="Portfolio highlight image for Munawara" width={64} height={64} className="rounded-full" />
         <h2 className="text-2xl font-semibold">Project Highlights</h2>
       </div>
 
@@ -58,7 +58,7 @@ export default function Portfolio() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {/* Highlight 1 */}
         <div className="p-6 bg-white rounded shadow-lg">
-          <Image src="/highlight1.jpg" alt="Highlight 1" width={400} height={300} className="mb-4 rounded" />
+          <Image src="/highlight1.jpg" alt="Screenshot of AI-powered analytics platform project" width={400} height={300} className="mb-4 rounded" />
           <h2 className="text-xl font-semibold mb-4">AI-Powered Analytics</h2>
           <p className="text-gray-700 mb-4">
             A cutting-edge analytics platform that leverages AI for data insights.
@@ -70,7 +70,7 @@ export default function Portfolio() {
 
         {/* Highlight 2 */}
         <div className="p-6 bg-white rounded shadow-lg">
-          <Image src="/highlight2.jpg" alt="Highlight 2" width={400} height={300} className="mb-4 rounded" />
+          <Image src="/highlight2.jpg" alt="Screenshot of mobile banking app project" width={400} height={300} className="mb-4 rounded" />
           <h2 className="text-xl font-semibold mb-4">Mobile Banking App</h2>
           <p className="text-gray-700 mb-4">
             A secure and user-friendly mobile banking application for a leading bank.
@@ -84,7 +84,7 @@ export default function Portfolio() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           {/* Project 1 */}
           <div className="p-6 bg-white rounded shadow-lg">
-            <Image src="/project1.jpg" alt="Project 1" width={400} height={300} className="mb-4 rounded" />
+            <Image src="/project1.jpg" alt="Screenshot of e-commerce platform project" width={400} height={300} className="mb-4 rounded" />
             <h2 className="text-xl font-semibold mb-4">E-Commerce Platform</h2>
             <p className="text-gray-700 mb-4">
               A modern, responsive e-commerce site built for a local retailer.
@@ -96,7 +96,7 @@ export default function Portfolio() {
 
           {/* Project 2 */}
           <div className="p-6 bg-white rounded shadow-lg">
-            <Image src="/project2.jpg" alt="Project 2" width={400} height={300} className="mb-4 rounded" />
+            <Image src="/project2.jpg" alt="Screenshot of AI chatbot project" width={400} height={300} className="mb-4 rounded" />
             <h2 className="text-xl font-semibold mb-4">AI Chatbot</h2>
             <p className="text-gray-700 mb-4">
               Developed an AI-powered chatbot to enhance customer support experiences.
