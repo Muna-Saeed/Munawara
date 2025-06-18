@@ -1,63 +1,142 @@
+"use client";
+import Head from 'next/head';
+import Link from 'next/link';
+import { useState } from 'react';
+
+const faqs = [
+  {
+    question: "What services does Munawara offer?",
+    answer: (
+      <>
+        We provide <span className="font-semibold text-blue-600">web development</span>, <span className="font-semibold text-blue-600">SEO services</span>, <span className="font-semibold text-blue-600">AI tools</span>, and more to help small businesses grow.
+      </>
+    ),
+  },
+  {
+    question: "How can I get started?",
+    answer: (
+      <>
+        Click <Link href="/" className="text-blue-600 hover:underline font-semibold">Start Today</Link> on our homepage or <Link href="/contact" className="text-blue-600 hover:underline font-semibold">contact us</Link> for personalized assistance.
+      </>
+    ),
+  },
+  {
+    question: "What is your pricing model?",
+    answer: (
+      <>
+        We offer <span className="font-semibold text-blue-600">competitive pricing</span> tailored to your specific needs. <Link href="/contact" className="text-blue-600 hover:underline font-semibold">Contact us</Link> for a quote.
+      </>
+    ),
+  },
+  {
+    question: "Do you offer support after project completion?",
+    answer: (
+      <>
+        Yes, we provide <span className="font-semibold text-blue-600">ongoing support and maintenance</span> for all our projects.
+      </>
+    ),
+  },
+  {
+    question: "Can I see examples of your work?",
+    answer: (
+      <>
+        Absolutely! Check out our <Link href="/portfolio" className="text-blue-600 hover:underline font-semibold">portfolio</Link> to see our previous projects.
+      </>
+    ),
+  },
+  {
+    question: "How do I contact you?",
+    answer: (
+      <div className="space-y-1">
+        <span>
+          You can reach us through the <Link href="/contact" className="text-blue-600 hover:underline font-semibold">contact form</Link> on our website or email us directly.
+        </span>
+        <div>
+          <span className="font-semibold">Email:</span>{" "}
+          <a href="mailto:munawara.tech@gmail.com" className="text-blue-600 hover:underline">munawara.tech@gmail.com</a>
+        </div>
+        <div>
+          <span className="font-semibold">Phone:</span>{" "}
+          <a href="tel:+251946809925" className="text-blue-600 hover:underline">+251 (946) 809-925</a>
+        </div>
+        <div>
+          <span className="font-semibold">Address:</span> Addis Ababa, Ethiopia
+        </div>
+        <div>
+          <span className="font-semibold">Website:</span>{" "}
+          <a href="https://munawara.tech" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">munawara.tech</a>
+        </div>
+      </div>
+    ),
+  },
+];
+
 export default function FAQ() {
-    return (
-      <section className="p-8 bg-gray-100 text-gray-700">
-        <h1 className="text-4xl font-bold text-black mb-4">FAQ</h1>
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-lg font-semibold">What services does Munawara offer?</h2>
-            <p className="text-gray-700">
-              We provide web development, SEO services, AI tools, and more to help small businesses grow.
-            </p>
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const handleToggle = (idx: number) => {
+    setOpenIndex(openIndex === idx ? null : idx);
+  };
+
+  return (
+    <>
+      <Head>
+        <title>Munawara - Frequently Asked Questions</title>
+        <meta name="description" content="Find answers to common questions about Munawara's digital solutions and services." />
+      </Head>
+      <section className="min-h-screen flex items-center justify-center bg-gray-100 px-2">
+        <div className="w-full max-w-2xl bg-white p-8 rounded-xl shadow-2xl">
+          <h1 className="text-4xl font-bold text-sky-800 mb-4 text-center">Frequently Asked Questions</h1>
+          <p className="text-gray-700 mb-8 text-center">Find quick answers to common questions about our digital solutions and services.</p>
+          <div className="space-y-3">
+            {faqs.map((faq, idx) => (
+              <div key={idx} className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                <button
+                  className={`w-full flex justify-between items-center px-5 py-4 text-left focus:outline-none transition-colors ${openIndex === idx ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'}`}
+                  onClick={() => handleToggle(idx)}
+                  aria-expanded={openIndex === idx}
+                  aria-controls={`faq-panel-${idx}`}
+                >
+                  <span className="text-lg font-semibold text-gray-900">{faq.question}</span>
+                  <svg
+                    className={`w-5 h-5 ml-2 transition-transform duration-200 ${openIndex === idx ? 'transform rotate-180 text-blue-600' : 'text-gray-400'}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openIndex === idx && (
+                  <div
+                    id={`faq-panel-${idx}`}
+                    className="px-5 pb-4 text-gray-700 animate-fadeIn"
+                  >
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-          <div>
-            <h2 className="text-lg font-semibold">How can I get started?</h2>
-            <p className="text-gray-700">
-              Click “Start Today” on our homepage or contact us for personalized assistance.
-            </p>
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/contact" className="flex-1 px-6 py-3 bg-sky-700 text-white rounded-lg text-center font-semibold hover:bg-sky-800 transition">
+              Contact Us
+            </Link>
+            <Link href="/about" className="flex-1 px-6 py-3 bg-white border border-sky-700 text-sky-700 rounded-lg text-center font-semibold hover:bg-sky-700 hover:text-white transition">
+              Learn More
+            </Link>
           </div>
-            <div>
-                <h2 className="text-lg font-semibold">What is your pricing model?</h2>
-                <p className="text-gray-700">
-                We offer competitive pricing tailored to your specific needs. Contact us for a quote.
-                </p>
-            </div>
-            <div>
-                <h2 className="text-lg font-semibold">Do you offer support after project completion?</h2>
-                <p className="text-gray-700">
-                Yes, we provide ongoing support and maintenance for all our projects.
-                </p>
-            </div>
-            <div>
-                <h2 className="text-lg font-semibold">Can I see examples of your work?</h2>
-                <p className="text-gray-700">
-                Absolutely! Check out our portfolio on our website to see our previous projects.
-                </p>
-            </div>
-            <div>
-                <h2 className="text-lg font-semibold">How do I contact you?</h2>
-                <p className="text-gray-700">
-                You can reach us through the contact form on our website or email us directly at
-                <br />
-                <strong>Email:</strong>
-                <a href="mailto:munawara.tech@gmail.com" className="text-blue-600 hover:underline">Munawara</a>
-                <br />
-                <strong>Phone:</strong> +251 (946) 809-925
-                <br />
-                <strong>Address:</strong> Addis Ababa, Ethiopia
-                <br />
-                <strong>Website:</strong>
-                <a href="https://munawara.tech" className="text-blue-600 hover:underline">munawara.tech</a>
-                </p>
-        </div>
-        <div className="mt-8 flex gap-4">
-            <button className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-500 transition duration-300">
-                Contact Us
-            </button>
-            <button className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-500 transition duration-300">
-                Learn More
-            </button>
-        </div>
         </div>
       </section>
-    );
-  }
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-8px);}
+          to { opacity: 1; transform: translateY(0);}
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease;
+        }
+      `}</style>
+    </>
+  );
+}
