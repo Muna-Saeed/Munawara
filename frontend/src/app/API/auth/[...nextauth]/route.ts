@@ -1,23 +1,11 @@
-//nstall NextAuth.js and Providers 
-// npm install next-auth @next-auth/prisma-adapter @next-auth/google @next-auth/github @next-auth/facebook
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import FacebookProvider from "next-auth/providers/facebook";
+import { authOptions } from "@/libs/auth";
+import { NextRequest } from "next/server";
 
-export default NextAuth({
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-    GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-    }),
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID!,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
-    }),
-  ],
-});
+// Create handlers for GET and POST
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
