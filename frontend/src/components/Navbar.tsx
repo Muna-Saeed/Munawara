@@ -1,34 +1,44 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/services", label: "Services" },
-  { href: "/about", label: "About" },
-  { href: "/blog", label: "Blog" },
-  { href: "/portfolio", label: "Portfolio" },
-  { href: "/testimonials", label: "Testimonials" },
-  { href: "/contact", label: "Contact" },
-  { href: "/login", label: "Login" },
-];
+import { useSession, signOut } from "next-auth/react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLUListElement>(null);
   const pathname = usePathname();
 
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === "authenticated";
+
+  const NAV_LINKS = useMemo(() => {
+    const base = [
+      { href: "/", label: "Home" },
+      { href: "/services", label: "Services" },
+      { href: "/about", label: "About" },
+      { href: "/blog", label: "Blog" },
+      { href: "/portfolio", label: "Portfolio" },
+      { href: "/testimonials", label: "Testimonials" },
+      { href: "/contact", label: "Contact" },
+    ];
+
+    if (!isAuthenticated) {
+      base.push({ href: "/login", label: "Login" });
+    } else {
+      base.push({ href: "/account", label: "Account" }); // placeholder for dropdown
+    }
+
+    return base;
+  }, [isAuthenticated]);
+
   // Close menu on outside click (mobile)
   useEffect(() => {
     if (!menuOpen) return;
     function handleClick(e: MouseEvent) {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(e.target as Node)
-      ) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setMenuOpen(false);
       }
     }
@@ -51,7 +61,10 @@ export default function Navbar() {
   return (
     <nav className="p-3 md:p-4 bg-gradient-to-r from-sky-900 via-sky-800 to-sky-700 text-white flex justify-between items-center relative shadow-md z-50">
       <Link href="/" className="flex items-center group">
-        <span className="inline-flex items-center justify-center bg-white/90 rounded-full shadow-lg border-2 border-sky-400 group-hover:scale-105 transition-transform duration-200" style={{ width: 64, height: 64 }}>
+        <span
+          className="inline-flex items-center justify-center bg-white/90 rounded-full shadow-lg border-2 border-sky-400 group-hover:scale-105 transition-transform duration-200"
+          style={{ width: 64, height: 64 }}
+        >
           <Image
             src="/logo.png"
             alt="Munawara Logo"
@@ -70,13 +83,41 @@ export default function Navbar() {
       <ul className="hidden md:flex space-x-2 lg:space-x-4 text-base font-medium">
         {NAV_LINKS.map(({ href, label }) => {
           const isActive = pathname === href;
+
+          if (label === "Account") {
+            return (
+              <li key={label} className="relative group">
+                <button
+                  className={`px-3 py-2 rounded transition-colors duration-200 hover:bg-sky-700/20 hover:text-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${isActive ? "text-sky-200 font-bold" : ""
+                    }`}
+                >
+                  {label}
+                </button>
+                <div className="absolute right-0 mt-2 w-40 bg-white text-sky-900 rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-200 z-50">
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 hover:bg-sky-100"
+                    tabIndex={0}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="block w-full text-left px-4 py-2 hover:bg-sky-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </li>
+            );
+          }
+
           return (
             <li key={href}>
               <Link
                 href={href}
-                className={`px-3 py-2 rounded transition-colors duration-200 hover:bg-sky-700/20 hover:text-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 relative ${
-                  isActive ? "text-sky-200 font-bold" : ""
-                }`}
+                className={`px-3 py-2 rounded transition-colors duration-200 hover:bg-sky-700/20 hover:text-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 relative ${isActive ? "text-sky-200 font-bold" : ""
+                  }`}
               >
                 {label}
                 {isActive && (
@@ -132,9 +173,8 @@ export default function Navbar() {
       <ul
         id="mobile-menu"
         ref={menuRef}
-        className={`fixed top-0 right-0 h-full w-64 bg-gradient-to-b from-sky-900 via-sky-800 to-sky-700 shadow-2xl flex flex-col text-lg font-semibold text-gray-100 md:hidden z-50 transform transition-transform duration-300 ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 h-full w-64 bg-gradient-to-b from-sky-900 via-sky-800 to-sky-700 shadow-2xl flex flex-col text-lg font-semibold text-gray-100 md:hidden z-50 transform transition-transform duration-300 ${menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         style={{ willChange: "transform" }}
         tabIndex={menuOpen ? 0 : -1}
         aria-label="Mobile Navigation"
@@ -167,9 +207,8 @@ export default function Navbar() {
             <li key={href}>
               <Link
                 href={href}
-                className={`block px-6 py-3 w-full hover:bg-sky-700/20 hover:text-sky-200 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 relative ${
-                  isActive ? "text-sky-200 bg-sky-700/10 font-bold" : ""
-                }`}
+                className={`block px-6 py-3 w-full hover:bg-sky-700/20 hover:text-sky-200 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 relative ${isActive ? "text-sky-200 bg-sky-700/10 font-bold" : ""
+                  }`}
                 onClick={() => setMenuOpen(false)}
                 tabIndex={menuOpen ? 0 : -1}
               >
