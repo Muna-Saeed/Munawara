@@ -5,6 +5,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import bcrypt from "bcryptjs";
+import { signIn } from "next-auth/react";
 
 
 export default function Register() {
@@ -174,28 +175,34 @@ export default function Register() {
           <div className="space-y-3">
             <button
               type="button"
+              onClick={() => signIn("google", { callbackUrl: "/" })}
               className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition"
               disabled={loading}
             >
-              <Image src="/icons/google.svg" alt="Google" width={20} height={20} />
+              <Image src="/icons/google.png" alt="Google" width={20} height={20} />
               Continue with Google
             </button>
+
             <button
               type="button"
+              onClick={() => signIn("github", { callbackUrl: "/" })}
               className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition"
               disabled={loading}
             >
               <Image src="/icons/github.svg" alt="GitHub" width={20} height={20} />
               Continue with GitHub
             </button>
+
             <button
               type="button"
+              onClick={() => signIn("facebook", { callbackUrl: "/" })}
               className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition"
               disabled={loading}
             >
               <Image src="/icons/facebook.svg" alt="Facebook" width={20} height={20} />
               Continue with Facebook
             </button>
+
           </div>
 
           <p className="mt-6 text-center text-sm text-gray-600">

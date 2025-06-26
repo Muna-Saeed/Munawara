@@ -142,7 +142,7 @@ export default function Login() {
               className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition"
               disabled={loading}
             >
-              <Image src="/icons/google.svg" alt="Google" width={20} height={20} />
+              <Image src="/icons/google.png" alt="Google" width={20} height={20} />
               Continue with Google
             </button>
             <button

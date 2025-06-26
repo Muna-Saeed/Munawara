@@ -4,7 +4,7 @@ import GitHubProvider from "next-auth/providers/github";
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
-import { findUserByEmail } from "../libs/dbManager";
+import { findUserByEmail, insertUser } from "../libs/dbManager";
 import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
@@ -52,6 +52,22 @@ export const authOptions: NextAuthOptions = {
         strategy: "jwt",
     },
     callbacks: {
+        async signIn({ user, account }) {
+            // Only run for OAuth providers
+            if (account?.provider !== "credentials") {
+                const existingUser = await findUserByEmail(user.email!);
+                if (!existingUser) {
+                    // Register new user
+                    await insertUser({
+                        name: user.name || "",
+                        email: user.email!,
+                        image: user.image || "",
+                        provider: account?.provider,
+                    });
+                }
+            }
+            return true;
+        },
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id;

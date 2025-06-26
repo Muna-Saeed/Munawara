@@ -4,8 +4,10 @@ import clientPromise from './mongodb'
 export interface User {
     name: string
     email: string
-    password: string
+    password?: string
     id?: string
+    provider?: string | null
+    image?: string | null
 }
 
 export async function insertUser(user: User) {
