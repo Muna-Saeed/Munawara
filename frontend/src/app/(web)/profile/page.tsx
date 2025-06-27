@@ -2,37 +2,29 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-
 import ProfileSection from '@/components/ProfileSection';
 import ServiceHistory from '@/components/ServiceHistory';
 import NewServiceRequest from '@/components/NewServiceRequest';
-import AdminDashboardFeature from '@/components/AdminDashboardFeature';
-
 import { Service, AvailableService } from 'next-auth';
-
-const TABS = [
-    { id: 'profile', label: 'Profile Information' },
-    { id: 'history', label: 'Your Service History' },
-    { id: 'request', label: 'Request New Service' },
-];
+import { Admin } from 'mongodb';
+import AdminDashboardFeature from '@/components/AdminDashboardFeature';
 
 const CustomerProfile = () => {
     const { data: session, status } = useSession();
-    const [activeTab, setActiveTab] = useState<'profile' | 'history' | 'request'>('profile');
+    const [activeTab, setActiveTab] = useState<'profile' | 'history' | 'request' | 'admin'>('profile');
     const [serviceHistory, setServiceHistory] = useState<Service[]>([]);
     const [availableServices, setAvailableServices] = useState<AvailableService[]>([]);
-    const [loading, setLoading] = useState({ history: false, services: false });
+    const [loading, setLoading] = useState({
+        history: false,
+        services: false,
+    });
 
-    const isAdmin = session?.user?.role === 'admin';
-
-    // Fetch service history when needed
     useEffect(() => {
         if (session?.user && activeTab === 'history') {
             fetchServiceHistory();
         }
     }, [session, activeTab]);
 
-    // Fetch available services when needed
     useEffect(() => {
         if (activeTab === 'request') {
             fetchAvailableServices();
@@ -46,7 +38,7 @@ const CustomerProfile = () => {
             const data = await res.json();
             setServiceHistory(data);
         } catch (error) {
-            console.error('Error fetching service history:', error);
+            console.error('Failed to fetch service history:', error);
         } finally {
             setLoading((prev) => ({ ...prev, history: false }));
         }
@@ -59,7 +51,7 @@ const CustomerProfile = () => {
             const data = await res.json();
             setAvailableServices(data);
         } catch (error) {
-            console.error('Error fetching available services:', error);
+            console.error('Failed to fetch available services:', error);
         } finally {
             setLoading((prev) => ({ ...prev, services: false }));
         }
@@ -70,12 +62,12 @@ const CustomerProfile = () => {
     if (!session?.user) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
-                <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full text-center">
+                <div className="bg-white p-8 rounded-2xl shadow-md max-w-md w-full text-center">
                     <h2 className="text-2xl font-semibold text-gray-800 mb-2">Authentication Required</h2>
                     <p className="text-gray-600 mb-6">Please sign in to access your profile and services.</p>
                     <button
                         onClick={() => (window.location.href = '/login')}
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition duration-200"
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition"
                     >
                         Sign In
                     </button>
@@ -86,35 +78,35 @@ const CustomerProfile = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-
-                {/* Admin-only Section */}
-                {isAdmin && (
-                    <div className="bg-white border border-gray-200 shadow-md rounded-2xl p-6">
-                        <AdminDashboardFeature />
-                    </div>
-                )}
-
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
                 {/* Navigation Tabs */}
-                <div className="border-b border-gray-200">
-                    <nav className="flex space-x-6">
-                        {TABS.map((tab) => (
+                <div className="mb-8">
+                    <div className="flex space-x-4 border-b border-gray-200">
+                        {[
+                            { id: 'profile', label: 'Profile Information' },
+                            { id: 'history', label: 'Your Service History' },
+                            { id: 'request', label: 'Request New Service' },
+                            ...(session.user.role === 'admin'
+                                ? [{ id: 'admin', label: 'Admin Dashboard' }]
+                                : [])
+                        ].map((tab) => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                                className={`px-4 py-2 text-sm font-semibold transition-all border-b-2 ${activeTab === tab.id
-                                    ? 'text-blue-600 border-blue-600'
-                                    : 'text-gray-500 border-transparent hover:text-blue-500'
+                                className={`px-4 py-2 text-sm font-medium rounded-t-lg transition ${activeTab === tab.id
+                                    ? 'bg-white text-blue-600 border-t-2 border-x border-t-blue-500 -mb-px'
+                                    : 'text-gray-500 hover:text-blue-500'
                                     }`}
                             >
                                 {tab.label}
                             </button>
                         ))}
-                    </nav>
+                    </div>
                 </div>
 
-                {/* Main Content */}
-                <div className="bg-white border border-gray-200 shadow-md rounded-2xl p-6 transition-all duration-200">
+
+                {/* Content Area */}
+                <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 transition-all duration-200">
                     {activeTab === 'profile' && <ProfileSection user={session.user} />}
                     {activeTab === 'history' && (
                         <ServiceHistory
@@ -130,7 +122,14 @@ const CustomerProfile = () => {
                             onRefresh={fetchAvailableServices}
                         />
                     )}
+
+                    {activeTab === 'admin' && session.user.role === 'admin' && (
+                        <AdminDashboardFeature />
+                    )}
+
                 </div>
+
+
             </div>
         </div>
     );

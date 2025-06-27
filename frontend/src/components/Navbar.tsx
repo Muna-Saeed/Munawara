@@ -8,11 +8,27 @@ import { useSession, signOut } from "next-auth/react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const menuRef = useRef<HTMLUListElement>(null);
+  const userMenuRef = useRef<HTMLLIElement>(null);
   const pathname = usePathname();
 
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
+
+  // Close menus when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const NAV_LINKS = useMemo(() => {
     const base = [
@@ -27,44 +43,43 @@ export default function Navbar() {
 
     if (!isAuthenticated) {
       base.push({ href: "/login", label: "Login" });
-    } else {
-      base.push({ href: "/account", label: "Account" }); // placeholder for dropdown
     }
 
     return base;
   }, [isAuthenticated]);
 
-  // Close menu on outside click (mobile)
-  useEffect(() => {
-    if (!menuOpen) return;
-    function handleClick(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [menuOpen]);
-
-  // Prevent scrolling when mobile menu is open
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [menuOpen]);
+  const UserCircleIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-8 w-8 text-white"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M5.121 17.804A9 9 0 1119.88 6.196 9 9 0 015.12 17.804z"
+      />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+      />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 14c-3.314 0-6 1.686-6 3.75v.75h12v-.75c0-2.064-2.686-3.75-6-3.75z"
+      />
+    </svg>
+  );
 
   return (
     <nav className="p-3 md:p-4 bg-gradient-to-r from-sky-900 via-sky-800 to-sky-700 text-white flex justify-between items-center relative shadow-md z-50">
+      {/* Logo */}
       <Link href="/" className="flex items-center group">
-        <span
-          className="inline-flex items-center justify-center bg-white/90 rounded-full shadow-lg border-2 border-sky-400 group-hover:scale-105 transition-transform duration-200"
-          style={{ width: 64, height: 64 }}
-        >
+        <span className="inline-flex items-center justify-center bg-white/90 rounded-full shadow-lg border-2 border-sky-400 group-hover:scale-105 transition-transform duration-200 w-16 h-16">
           <Image
             src="/logo.png"
             alt="Munawara Logo"
@@ -80,56 +95,91 @@ export default function Navbar() {
       </Link>
 
       {/* Desktop Menu */}
-      <ul className="hidden md:flex space-x-2 lg:space-x-4 text-base font-medium">
-        {NAV_LINKS.map(({ href, label }) => {
-          const isActive = pathname === href;
+      <ul className="hidden md:flex space-x-2 lg:space-x-4 text-base font-medium items-center h-[44px]">
+        {NAV_LINKS.map(({ href, label }) => (
+          <li key={href}>
+            <Link
+              href={href}
+              className={`px-3 py-2 rounded transition-colors duration-200 hover:bg-sky-700/20 hover:text-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 relative ${pathname === href ? "text-sky-200 font-bold" : ""
+                }`}
+              style={{ lineHeight: "1.25rem" }}
+            >
+              {label}
+              {pathname === href && (
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-300 rounded-full"></span>
+              )}
+            </Link>
+          </li>
+        ))}
 
-          if (label === "Account") {
-            return (
-              <li key={label} className="relative group">
-                <button
-                  className={`px-3 py-2 rounded transition-colors duration-200 hover:bg-sky-700/20 hover:text-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${isActive ? "text-sky-200 font-bold" : ""
-                    }`}
-                >
-                  {label}
-                </button>
-                <div className="absolute right-0 mt-2 w-40 bg-white text-sky-900 rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-200 z-50">
+        {/* User Menu */}
+        {isAuthenticated && (
+          <li className="relative" ref={userMenuRef}>
+            <button
+              onClick={() => setUserMenuOpen(!userMenuOpen)}
+              className="p-2 rounded-full flex items-center justify-center transition-colors duration-200 hover:bg-sky-700/30 hover:text-sky-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+              style={{ transform: "translateY(1px)" }}
+              aria-expanded={userMenuOpen}
+              aria-haspopup="true"
+            >
+              {session?.user?.image ? (
+                <Image
+                  src={session.user.image}
+                  width={28}
+                  height={28}
+                  className="rounded-full"
+                  alt="User profile"
+                />
+              ) : (
+                <UserCircleIcon />
+              )}
+              <span className="sr-only">User menu</span>
+            </button>
+
+            {/* Enhanced Dropdown Menu */}
+            {userMenuOpen && (
+              <div
+                className="absolute right-0 mt-1 w-48 bg-white text-sky-900 rounded-lg shadow-xl overflow-hidden z-50 animate-fade-in"
+                style={{
+                  boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                  transformOrigin: "top right"
+                }}
+              >
+                <div className="py-1">
+                  <div className="px-4 py-2 text-sm text-sky-700 border-b border-sky-100">
+                    {session.user?.name || "My Account"}
+                  </div>
                   <Link
                     href="/profile"
-                    className="block px-4 py-2 hover:bg-sky-100"
-                    tabIndex={0}
+                    className="block px-4 py-2 text-sm hover:bg-sky-50 transition-colors"
+                    onClick={() => setUserMenuOpen(false)}
                   >
                     Profile
                   </Link>
-                  <button
-                    onClick={() => signOut({ callbackUrl: "/" })}
-                    className="block w-full text-left px-4 py-2 hover:bg-sky-100"
+                  <Link
+                    href="#"
+                    className="block px-4 py-2 text-sm hover:bg-sky-50 transition-colors"
+                    onClick={() => setUserMenuOpen(false)}
                   >
-                    Logout
+                    Settings
+                  </Link>
+                  <button
+                    onClick={() => {
+                      signOut({ callbackUrl: "/" });
+                      setUserMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm hover:bg-sky-50 text-red-600 transition-colors"
+                  >
+                    Sign out
                   </button>
                 </div>
-              </li>
-            );
-          }
-
-          return (
-            <li key={href}>
-              <Link
-                href={href}
-                className={`px-3 py-2 rounded transition-colors duration-200 hover:bg-sky-700/20 hover:text-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 relative ${isActive ? "text-sky-200 font-bold" : ""
-                  }`}
-              >
-                {label}
-                {isActive && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-300 rounded-full"></span>
-                )}
-              </Link>
-            </li>
-          );
-        })}
+              </div>
+            )}
+          </li>
+        )}
       </ul>
 
-      {/* Hamburger Icon */}
+      {/* Mobile Menu Button */}
       <button
         className="md:hidden ml-2 p-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition hover:bg-sky-800"
         onClick={() => setMenuOpen((open) => !open)}
@@ -201,25 +251,56 @@ export default function Navbar() {
             </svg>
           </button>
         </li>
-        {NAV_LINKS.map(({ href, label }) => {
-          const isActive = pathname === href;
-          return (
-            <li key={href}>
+
+        {NAV_LINKS.map(({ href, label }) => (
+          <li key={href}>
+            <Link
+              href={href}
+              className={`block px-6 py-3 w-full hover:bg-sky-700/20 hover:text-sky-200 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 relative ${pathname === href ? "text-sky-200 bg-sky-700/10 font-bold" : ""
+                }`}
+              onClick={() => setMenuOpen(false)}
+              tabIndex={menuOpen ? 0 : -1}
+            >
+              {label}
+              {pathname === href && (
+                <span className="absolute left-0 top-0 w-1 h-full bg-sky-300 rounded-r-full"></span>
+              )}
+            </Link>
+          </li>
+        ))}
+
+        {isAuthenticated && (
+          <>
+            <div className="border-t border-sky-800">
               <Link
-                href={href}
-                className={`block px-6 py-3 w-full hover:bg-sky-700/20 hover:text-sky-200 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 relative ${isActive ? "text-sky-200 bg-sky-700/10 font-bold" : ""
+                href="/profile"
+                className={`block px-6 py-3 w-full hover:bg-sky-700/20 hover:text-sky-200 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 relative ${pathname === "/profile" ? "text-sky-200 bg-sky-700/10 font-bold" : ""
                   }`}
                 onClick={() => setMenuOpen(false)}
-                tabIndex={menuOpen ? 0 : -1}
               >
-                {label}
-                {isActive && (
-                  <span className="absolute left-0 top-0 w-1 h-full bg-sky-300 rounded-r-full"></span>
-                )}
+                Profile
               </Link>
-            </li>
-          );
-        })}
+              <Link
+                href="/settings"
+                className={`block px-6 py-3 w-full hover:bg-sky-700/20 hover:text-sky-200 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 relative ${pathname === "/settings" ? "text-sky-200 bg-sky-700/10 font-bold" : ""
+                  }`}
+                onClick={() => setMenuOpen(false)}
+              >
+                Settings
+              </Link>
+              <button
+                onClick={() => {
+                  signOut({ callbackUrl: "/" });
+                  setMenuOpen(false);
+                }}
+                className="block w-full text-left px-6 py-3 hover:bg-sky-700/20 hover:text-sky-200 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 text-red-300"
+              >
+                Sign out
+              </button>
+            </div>
+          </>
+        )}
+
         <li className="mt-auto px-6 py-4 text-xs text-gray-300 border-t border-sky-800">
           &copy; {new Date().getFullYear()} Munawara. All rights reserved.
         </li>
