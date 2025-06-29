@@ -1,5 +1,5 @@
 // lib/dbManager.ts
-import { AvailableService, Service } from 'next-auth'
+import { AvailableService, Product } from 'next-auth'
 import clientPromise from './mongodb'
 import { ServiceRequest } from 'next-auth';
 import { ObjectId } from 'mongodb';
@@ -66,7 +66,7 @@ export async function insertServiceRequest(service: Omit<ServiceRequest, 'status
     return await collection.insertOne(requestWithDefaults);
 }
 
-export async function InseravailableServices(services: AvailableService[]) {
+export async function InsertProduct(services: AvailableService[]) {
     const client = await clientPromise
     const db = client.db("munawara")
     const collection = db.collection('availableServices')
@@ -151,3 +151,33 @@ export async function deleteUser(userId: ObjectId) {
     // Execute deleteOne with the userId filter
     return await collection.deleteOne({ _id: userId });
 }
+
+
+export async function updateProducts(product: Product, productId: string) {
+    const client = await clientPromise;
+    const db = client.db("munawara");
+    const collection = db.collection('availableServices');
+
+    // Convert productId to ObjectId if necessary
+    const id = new ObjectId(productId);
+
+    const { _id, ...productWithoutId } = product;
+
+    return await collection.updateOne(
+        { _id: id },
+        { $set: productWithoutId }
+    );
+}
+
+
+export async function updateOrder(orderId: string, updates: Partial<ServiceRequest>) {
+    const client = await clientPromise;
+    const db = client.db("munawara");
+    const collection = db.collection('serviceRequests');
+
+    return await collection.updateOne(
+        { _id: new ObjectId(orderId) },
+        { $set: updates }
+    );
+}
+

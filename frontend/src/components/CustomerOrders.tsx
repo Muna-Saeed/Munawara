@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Service } from 'next-auth';
+import LoadingSpinner from './LoadingSpinner';
 
 interface ServiceHistoryProps {
     services: Service[];
@@ -14,9 +15,14 @@ const MAX_DESCRIPTION_LENGTH = 120;
 const ServiceHistory = ({ services, loading, onRefresh }: ServiceHistoryProps) => {
     const [expandedServiceId, setExpandedServiceId] = useState<string | null>(null);
 
+
     const toggleDescription = (id: string) => {
         setExpandedServiceId((prev) => (prev === id ? null : id));
     };
+
+    if (loading) {
+        return <LoadingSpinner />
+    }
 
     return (
         <div className="p-6">

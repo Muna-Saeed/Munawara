@@ -31,7 +31,7 @@ declare module "next-auth" {
     }
 
     interface Message {
-        id?: string;
+        _id?: string;
         sender: [name: string, email: string];
         content: string;
         timestamp?: string;
@@ -104,6 +104,23 @@ declare module "next-auth" {
         estimatedDelivery: string;
         category: 'web' | 'ai' | 'ecommerce' | 'content' | 'mobile' | 'marketing';
     }
+
+    interface Product {
+        _id?: string;
+        name: string;
+        description: string;
+        price: number;
+        category: string;
+        imageUrl?: string;
+        stock?: number;
+        isActive?: boolean;
+        createdAt?: string;
+        updatedAt?: string;
+        createdBy?: string;
+        updatedBy?: string;
+    }
+
+
 
     interface ServiceRequest {
         serviceId: string;

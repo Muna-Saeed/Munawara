@@ -1,4 +1,3 @@
-// AdminDashboardFeature using modular components
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -9,8 +8,11 @@ import Orders from './Orders';
 import Users from './Users';
 import Messages from './Messages';
 import EditUser from './EditUser';
+import LoadingSpinner from './LoadingSpinner';
 
 import { Message } from 'next-auth';
+import Products from './Products';
+
 export interface Order {
     _id: string;
     userId: string;
@@ -25,8 +27,17 @@ const AdminDashboardFeature = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [orders, setOrders] = useState<Order[]>([]);
     const [messages, setMessages] = useState<Message[]>([]);
-    const [activeTab, setActiveTab] = useState<'orders' | 'users' | 'messages'>('orders');
+    const [activeTab, setActiveTab] = useState<'orders' | 'users' | 'messages' | 'products'>('orders');
     const [editingUserId, setEditingUserId] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [products, setProducts] = useState<any>(null);
+
+    const tabs = [
+        { label: 'Orders', value: 'orders' },
+        { label: 'Users', value: 'users' },
+        { label: 'Messages', value: 'messages' },
+        { label: 'Products', value: 'products' },
+    ];
 
     useEffect(() => {
         refreshData();
@@ -40,18 +51,21 @@ const AdminDashboardFeature = () => {
             const res = await fetch(endpoint);
             const data: T = await res.json();
             setter(data);
+            setLoading(false);
         } catch (error) {
             console.error(`Failed to fetch from ${endpoint}:`, error);
         }
     };
 
     const refreshData = () => {
+        setLoading(true);
         fetchData<User[]>('/api/users', setUsers);
         fetchData<Message[]>('/api/messages', setMessages);
         fetch('/api/orders')
             .then((res) => res.json())
             .then((data: Order[]) => {
                 const uniqueOrders = Array.from(new Map(data.map((o) => [o._id, o])).values());
+                setLoading(false);
                 setOrders(uniqueOrders);
             })
             .catch((error) => {
@@ -112,65 +126,66 @@ const AdminDashboardFeature = () => {
         }
     };
 
-
-
+    if (loading) {
+        return <LoadingSpinner />;
+    }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
-            <div className="max-w-7xl mx-auto space-y-8">
+        <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+            <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
                 {/* Header */}
-                <div className="flex justify-between items-center">
-                    <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Admin Dashboard</h1>
                     <button
                         onClick={refreshData}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                        className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm sm:text-base rounded-lg hover:bg-blue-700 transition"
                     >
                         <RefreshCcw size={16} /> Refresh Data
                     </button>
                 </div>
 
-                {/* Tab Navigation */}
-                <div className="flex border-b border-gray-200">
-                    <button
-                        onClick={() => {
-                            setActiveTab('orders');
+                {/* Responsive Tab Navigation */}
+                {/* Mobile: Select dropdown */}
+                <div className="md:hidden mb-4">
+                    <select
+                        value={activeTab}
+                        onChange={(e) => {
+                            setActiveTab(e.target.value as typeof activeTab);
                             setEditingUserId(null);
+                            if (e.target.value === 'products') setProducts(null);
                         }}
-                        className={`px-6 py-3 text-lg font-medium transition-colors duration-200 ${activeTab === 'orders'
-                            ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50'
-                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-                            }`}
+                        className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 bg-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                     >
-                        Orders
-                    </button>
-                    <button
-                        onClick={() => {
-                            setActiveTab('users');
-                            setEditingUserId(null);
-                        }}
-                        className={`px-6 py-3 text-lg font-medium transition-colors duration-200 ${activeTab === 'users'
-                            ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50'
-                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-                            }`}
-                    >
-                        Users
-                    </button>
-                    <button
-                        onClick={() => {
-                            setActiveTab('messages');
-                            setEditingUserId(null);
-                        }}
-                        className={`px-6 py-3 text-lg font-medium transition-colors duration-200 ${activeTab === 'messages'
-                            ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50'
-                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-                            }`}
-                    >
-                        Messages
-                    </button>
+                        {tabs.map((tab) => (
+                            <option key={tab.value} value={tab.value}>
+                                {tab.label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Desktop: Button tabs */}
+                <div className="hidden md:flex overflow-x-auto border-b border-gray-200 no-scrollbar">
+                    {tabs.map((tab) => (
+                        <button
+                            key={tab.value}
+                            onClick={() => {
+                                setActiveTab(tab.value as typeof activeTab);
+                                setEditingUserId(null);
+                                if (tab.value === 'products') setProducts(null);
+                            }}
+                            className={`whitespace-nowrap px-4 sm:px-6 py-2 text-sm sm:text-base font-medium transition-colors duration-200 ${activeTab === tab.value
+                                ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50'
+                                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+                                }`}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
                 </div>
 
                 {/* Content Area */}
-                <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+                <div className="bg-white rounded-xl shadow p-4 sm:p-6 border border-gray-200">
                     {activeTab === 'orders' && <Orders orders={orders} onUpdate={handleOrderUpdate} />}
                     {activeTab === 'users' && editingUserId ? (
                         <EditUser
@@ -179,16 +194,10 @@ const AdminDashboardFeature = () => {
                             onCancel={() => setEditingUserId(null)}
                         />
                     ) : activeTab === 'users' ? (
-                        <Users
-                            users={users}
-                            onUpdateUser={(id) => {
-                                console.log('Calling edit for user:', id);
-                                setEditingUserId(id);
-                            }}
-                            onDeleteUser={handleDeleteUser}
-                        />
+                        <Users users={users} onUpdateUser={(id) => setEditingUserId(id)} onDeleteUser={handleDeleteUser} />
                     ) : null}
                     {activeTab === 'messages' && <Messages messages={messages} />}
+                    {activeTab === 'products' && <Products />}
                 </div>
             </div>
         </div>

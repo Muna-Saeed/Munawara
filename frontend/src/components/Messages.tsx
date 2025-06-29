@@ -31,7 +31,7 @@ const Messages = ({ messages }: Props) => {
 
                         return (
                             <div
-                                key={msg.id}
+                                key={msg._id}
                                 className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
                             >
                                 <div className="space-y-3">

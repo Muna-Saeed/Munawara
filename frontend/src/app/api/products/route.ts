@@ -1,4 +1,4 @@
-import { InseravailableServices } from '@/libs/dbManager';
+import { InsertProduct } from '@/libs/dbManager';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
@@ -15,8 +15,8 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Invalid services data' }, { status: 400 });
         }
 
-        // Insert the available services into the database
-        const result = await InseravailableServices(services);
+        // Insert the available products into the database
+        const result = await InsertProduct(services);
 
         return NextResponse.json({ success: true, data: result }, { status: 201 });
     } catch (error) {

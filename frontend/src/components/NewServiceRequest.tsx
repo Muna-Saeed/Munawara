@@ -4,6 +4,7 @@ import { AvailableService } from 'next-auth';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import LoadingSpinner from './LoadingSpinner';
 
 interface NewServiceRequestProps {
     services: AvailableService[];
@@ -49,7 +50,7 @@ const NewServiceRequest = ({ services, loading, onRefresh }: NewServiceRequestPr
         }
     };
 
-    if (status === 'loading') return <div className="p-6">Loading...</div>;
+    if (status === 'loading' || loading) return <LoadingSpinner />;
 
     return (
         <div className="p-6 max-w-5xl mx-auto space-y-6">

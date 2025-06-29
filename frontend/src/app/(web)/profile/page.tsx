@@ -3,10 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import ProfileSection from '@/components/ProfileSection';
-import ServiceHistory from '@/components/ServiceHistory';
+import ServiceHistory from '@/components/CustomerOrders';
 import NewServiceRequest from '@/components/NewServiceRequest';
 import { Service, AvailableService } from 'next-auth';
-import { Admin } from 'mongodb';
 import AdminDashboardFeature from '@/components/AdminDashboardFeature';
 
 const CustomerProfile = () => {
@@ -76,34 +75,47 @@ const CustomerProfile = () => {
         );
     }
 
+    const tabs = [
+        { id: 'profile', label: 'Profile Information' },
+        { id: 'history', label: 'My Requests' },
+        { id: 'request', label: 'Request New Service' },
+        ...(session.user.role === 'admin' ? [{ id: 'admin', label: 'Admin Dashboard' }] : []),
+    ];
+
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-                {/* Navigation Tabs */}
-                <div className="mb-8">
-                    <div className="flex space-x-4 border-b border-gray-200">
-                        {[
-                            { id: 'profile', label: 'Profile Information' },
-                            { id: 'history', label: 'Your Service History' },
-                            { id: 'request', label: 'Request New Service' },
-                            ...(session.user.role === 'admin'
-                                ? [{ id: 'admin', label: 'Admin Dashboard' }]
-                                : [])
-                        ].map((tab) => (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                                className={`px-4 py-2 text-sm font-medium rounded-t-lg transition ${activeTab === tab.id
-                                    ? 'bg-white text-blue-600 border-t-2 border-x border-t-blue-500 -mb-px'
-                                    : 'text-gray-500 hover:text-blue-500'
-                                    }`}
-                            >
+
+                {/* Mobile: Dropdown Tab Navigation */}
+                <div className="md:hidden mb-6">
+                    <select
+                        value={activeTab}
+                        onChange={(e) => setActiveTab(e.target.value as typeof activeTab)}
+                        className="w-full border bg-blue-200 text-gray-800 border-gray-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    >
+                        {tabs.map((tab) => (
+                            <option key={tab.id} value={tab.id}>
                                 {tab.label}
-                            </button>
+                            </option>
                         ))}
-                    </div>
+                    </select>
                 </div>
 
+                {/* Desktop: Tab Navigation */}
+                <div className="hidden md:flex mb-8 border-b border-gray-200">
+                    {tabs.map((tab) => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                            className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-all duration-150 ${activeTab === tab.id
+                                ? 'bg-white text-blue-600 border-t-2 border-x border-t-blue-500 -mb-px'
+                                : 'text-gray-500 hover:text-blue-500'
+                                }`}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
+                </div>
 
                 {/* Content Area */}
                 <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 transition-all duration-200">
@@ -122,14 +134,10 @@ const CustomerProfile = () => {
                             onRefresh={fetchAvailableServices}
                         />
                     )}
-
                     {activeTab === 'admin' && session.user.role === 'admin' && (
                         <AdminDashboardFeature />
                     )}
-
                 </div>
-
-
             </div>
         </div>
     );

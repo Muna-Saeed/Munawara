@@ -7,7 +7,6 @@ if (!uri) {
     throw new Error(' Please define MONGODB_URI in .env.local')
 }
 
-// Add these options to ensure TLS + proper server API version
 const options = {
     tls: true,
     serverApi: {
