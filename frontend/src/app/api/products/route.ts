@@ -1,22 +1,16 @@
 import { InsertProduct } from '@/libs/dbManager';
+import { AvailableService } from 'next-auth';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
     try {
-        const body = await request.json();
-
-        // Extract the actual services array
-        const services = body.services;
-
-        console.log('Received services:', services);
-
-        // Validate the services array
-        if (!Array.isArray(services) || services.length === 0) {
+        const body: AvailableService = await request.json();
+        console.log('Received data:', body);
+        // Insert the available products into the database AvailableService services will never be array
+        if (!body || !body.name || !body.description) {
             return NextResponse.json({ error: 'Invalid services data' }, { status: 400 });
         }
-
-        // Insert the available products into the database
-        const result = await InsertProduct(services);
+        const result = await InsertProduct(body);
 
         return NextResponse.json({ success: true, data: result }, { status: 201 });
     } catch (error) {

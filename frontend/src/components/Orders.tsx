@@ -78,7 +78,7 @@ export default function Orders({ orders, onUpdate }: OrdersProps) {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0">
+            <div className="flex flex-col md:flex-row text-gray-600 md:items-center md:justify-between space-y-3 md:space-y-0">
                 <h2 className="text-2xl font-bold text-gray-800">
                     Orders <span className="text-blue-600">({filteredOrders.length})</span>
                 </h2>
@@ -88,7 +88,7 @@ export default function Orders({ orders, onUpdate }: OrdersProps) {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search by ID or user..."
-                        className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm w-56 focus:outline-none focus:ring focus:ring-blue-200"
+                        className="px-3 py-1.5 border border-gray-900 text-gray-800 rounded-lg text-sm w-56 focus:outline-none focus:ring focus:ring-blue-200"
                     />
                     <select
                         value={sortBy}

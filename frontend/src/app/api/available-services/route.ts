@@ -12,7 +12,7 @@ export async function GET() {
             price: service.price,
             category: service.category,
             imageUrl: service.imageUrl ?? '',
-            stock: service.stock ?? 0,
+            id: service.id ? service.id.toString() : "",
             isActive: service.isActive ?? true,
             createdAt: service.createdAt,
             updatedAt: service.updatedAt,

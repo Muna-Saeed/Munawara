@@ -7,7 +7,6 @@ import { ServiceRequest } from 'next-auth';
 export async function POST(request: Request) {
     try {
         const serviceRequest: ServiceRequest = await request.json();
-
         // Validate the serviceRequest object
         if (!serviceRequest || !serviceRequest.serviceId || !serviceRequest.userId) {
             return NextResponse.json({ error: 'Invalid service request data' }, { status: 400 });

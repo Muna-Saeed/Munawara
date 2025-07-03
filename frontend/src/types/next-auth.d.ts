@@ -54,7 +54,12 @@ declare module "next-auth" {
             createdAt?: string | null;
             industry?: string | null;
             phone?: string | null;
-        } & DefaultSession["user"]; // Preserve default session fields
+        } & DefaultSession["user"];
+        expires: string;
+        accessToken?: string;
+        accessTokenExpires?: number;
+        refreshToken?: string;
+        id: string;
     }
 
     /**
@@ -96,23 +101,44 @@ declare module "next-auth" {
         };
     }
 
+    interface UserSessionType {
+        _id?: ObjectId;
+        userId: string;
+        sessionId: string;
+        loginTime: Date;
+        logoutTime?: Date;
+        lastActiveAt: Date;
+        isOnline: boolean;
+        ipAddress?: string;
+        location?: {
+            city?: string;
+            country?: string;
+            lat?: number;
+            lon?: number;
+        };
+        userAgent?: string;
+    }
+
+
     interface AvailableService {
-        id: string;
         name: string;
         description: string;
-        basePrice: number;
+        price: number;
         estimatedDelivery: string;
-        category: 'web' | 'ai' | 'ecommerce' | 'content' | 'mobile' | 'marketing';
+        category: string;
+        imageUrl?: string;
+        isActive?: boolean;
+        createdAt?: string;
+
     }
 
     interface Product {
-        _id?: string;
+        _id: string;
         name: string;
         description: string;
         price: number;
         category: string;
         imageUrl?: string;
-        stock?: number;
         isActive?: boolean;
         createdAt?: string;
         updatedAt?: string;

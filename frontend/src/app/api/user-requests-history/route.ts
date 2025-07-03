@@ -6,31 +6,30 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
 
-    console.log('Fetching user requests history for userId:', userId);
-
     if (!userId) {
         return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
     try {
         const requests = await getUserHistory(userId);
-        console.log('Fetched requests:', requests);
         const services = await getAvailbleService();
-        console.log('Fetched services:', services);
 
-        const serviceMap = new Map(services.map(service => [service.id, service]));
+        // ✅ FIX 1: Convert the service's '_id' (which is an ObjectId) to a string for the map key.
+        const serviceMap = new Map(services.map(service => [service._id.toString(), service]));
 
         const combined: Service[] = requests.map(req => {
+            // Now this lookup will work correctly because both keys are strings.
             const matchedService = serviceMap.get(req.serviceId);
 
             return {
-                id: req.serviceId,
+                // ✅ FIX 2: Corrected typo from req._d to req._id and converted to string.
+                id: req._id.toString(),
                 name: matchedService?.name || 'Unknown Service',
                 description: matchedService?.description || '',
                 status: req.status,
                 requestedAt: req.requestedAt,
-                price: matchedService?.basePrice,
-                // completedAt and feedback can be added if available in req
+                // ✅ FIX 3: Corrected property from basePrice to price.
+                price: matchedService?.price,
             };
         });
 

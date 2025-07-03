@@ -3,6 +3,7 @@ import { AvailableService, Product } from 'next-auth'
 import clientPromise from './mongodb'
 import { ServiceRequest } from 'next-auth';
 import { ObjectId } from 'mongodb';
+import { UserSessionType } from 'next-auth';
 
 
 export interface User {
@@ -66,16 +67,12 @@ export async function insertServiceRequest(service: Omit<ServiceRequest, 'status
     return await collection.insertOne(requestWithDefaults);
 }
 
-export async function InsertProduct(services: AvailableService[]) {
+export async function InsertProduct(services: AvailableService) {
     const client = await clientPromise
     const db = client.db("munawara")
     const collection = db.collection('availableServices')
-
-    // Clear existing services before inserting new ones
-    await collection.deleteMany({})
-
     // Insert new services
-    return await collection.insertMany(services)
+    return await collection.insertOne(services)
 }
 
 export async function getUsers() {
@@ -180,4 +177,43 @@ export async function updateOrder(orderId: string, updates: Partial<ServiceReque
         { $set: updates }
     );
 }
+
+export async function UserSession(userSession: UserSessionType) {
+    const client = await clientPromise;
+    const db = client.db("munawara");
+    const collection = db.collection('userSessions');
+    //chek if the user session already exists
+    const existingSession = await collection.findOne({ userId: userSession.userId });
+    //if exists, update it
+    if (existingSession) {
+        return await collection.updateOne(
+            { userId: userSession.userId },
+            { $set: userSession }
+        );
+    }
+
+    return await collection.insertOne(userSession);
+}
+
+export async function updateUserSession(sessionId: string, updates: Partial<UserSessionType>) {
+    const client = await clientPromise;
+    const db = client.db("munawara");
+    const collection = db.collection('userSessions');
+
+    return await collection.updateOne(
+        { sessionId },
+        { $set: updates }
+    );
+}
+
+
+export async function deleteProduct(productId: string) {
+    //change id to objectId
+    const objectId = new ObjectId(productId);
+    const client = await clientPromise;
+    const db = client.db("munawara");
+    const collection = db.collection('availableServices');
+    return await collection.deleteOne({ _id: objectId });
+}
+
 

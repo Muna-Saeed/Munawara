@@ -16,6 +16,7 @@ const ServiceHistory = ({ services, loading, onRefresh }: ServiceHistoryProps) =
     const [expandedServiceId, setExpandedServiceId] = useState<string | null>(null);
 
 
+
     const toggleDescription = (id: string) => {
         setExpandedServiceId((prev) => (prev === id ? null : id));
     };

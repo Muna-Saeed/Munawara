@@ -7,7 +7,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     try {
         const body = await request.json();
         const url = new URL(request.url);
-        const userId = url.pathname.split('/').pop(); // Extract [id] from the URL
+        const userId = url.pathname.split('/').pop();
 
         if (!userId || !ObjectId.isValid(userId)) {
             return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });

@@ -32,7 +32,7 @@ const Products = () => {
     const handleDelete = async (id?: string) => {
         if (!id) return;
         try {
-            await fetch(`/api/service-requests/${id}`, { method: 'DELETE' });
+            await fetch(`/api/products/${id}/delete`, { method: 'DELETE' });
             setProducts((prev) => prev.filter((p) => p._id !== id));
         } catch (err) {
             console.error('Delete failed:', err);

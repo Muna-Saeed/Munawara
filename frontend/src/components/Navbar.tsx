@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { UserSessionType } from "next-auth";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -12,9 +13,58 @@ export default function Navbar() {
   const menuRef = useRef<HTMLUListElement>(null);
   const userMenuRef = useRef<HTMLLIElement>(null);
   const pathname = usePathname();
+  const [hasTrackedLogin, setHasTrackedLogin] = useState(false);
+
 
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
+
+
+  useEffect(() => {
+    if (!isAuthenticated || !session?.user?.id || hasTrackedLogin) return;
+    console.log(session)
+
+    const trackLogin = async () => {
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const geo = await res.json();
+
+        const data = {
+          userId: session.user.id,
+          sessionId: session.id,
+          loginTime: new Date(),
+          lastActiveAt: new Date(),
+          isOnline: true,
+          ipAddress: geo.ip || '',
+          location: {
+            city: geo.city,
+            country: geo.country_name,
+            lat: geo.latitude,
+            lon: geo.longitude,
+          },
+          userAgent: navigator.userAgent,
+        };
+
+        const response = await fetch(`/api/users/${data.userId}/login-log`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+          setHasTrackedLogin(true);
+        } else {
+          console.warn('Login tracking failed with status:', response.status);
+        }
+      } catch (err) {
+        console.error('Failed to track login session', err);
+      }
+    };
+
+    trackLogin();
+  }, [isAuthenticated, session, hasTrackedLogin]);
+
+
 
   // Close menus when clicking outside
   useEffect(() => {

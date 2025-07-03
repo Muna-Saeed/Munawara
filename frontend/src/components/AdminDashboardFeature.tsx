@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { User } from 'next-auth';
+import { Product, User } from 'next-auth';
 import { RefreshCcw } from 'lucide-react';
 
 import Orders from './Orders';
@@ -30,7 +30,7 @@ const AdminDashboardFeature = () => {
     const [activeTab, setActiveTab] = useState<'orders' | 'users' | 'messages' | 'products'>('orders');
     const [editingUserId, setEditingUserId] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const [products, setProducts] = useState<any>(null);
+    const [products, setProducts] = useState<Product | null>(null);
 
     const tabs = [
         { label: 'Orders', value: 'orders' },
@@ -42,6 +42,7 @@ const AdminDashboardFeature = () => {
     useEffect(() => {
         refreshData();
     }, []);
+
 
     const fetchData = async <T,>(
         endpoint: string,

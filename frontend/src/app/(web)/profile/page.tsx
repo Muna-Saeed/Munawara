@@ -5,14 +5,14 @@ import { useSession } from 'next-auth/react';
 import ProfileSection from '@/components/ProfileSection';
 import ServiceHistory from '@/components/CustomerOrders';
 import NewServiceRequest from '@/components/NewServiceRequest';
-import { Service, AvailableService } from 'next-auth';
+import { Service, Product } from 'next-auth';
 import AdminDashboardFeature from '@/components/AdminDashboardFeature';
 
 const CustomerProfile = () => {
     const { data: session, status } = useSession();
     const [activeTab, setActiveTab] = useState<'profile' | 'history' | 'request' | 'admin'>('profile');
     const [serviceHistory, setServiceHistory] = useState<Service[]>([]);
-    const [availableServices, setAvailableServices] = useState<AvailableService[]>([]);
+    const [availableServices, setAvailableServices] = useState<Product[]>([]);
     const [loading, setLoading] = useState({
         history: false,
         services: false,
