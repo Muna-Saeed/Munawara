@@ -195,13 +195,13 @@ export async function UserSession(userSession: UserSessionType) {
     return await collection.insertOne(userSession);
 }
 
-export async function updateUserSession(sessionId: string, updates: Partial<UserSessionType>) {
+export async function updateUserSession(userId: string, updates: Partial<UserSessionType>) {
     const client = await clientPromise;
     const db = client.db("munawara");
     const collection = db.collection('userSessions');
 
     return await collection.updateOne(
-        { sessionId },
+        { userId },
         { $set: updates }
     );
 }

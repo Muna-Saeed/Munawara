@@ -1,3 +1,4 @@
+//api/users/[id]/heartbeat/route.ts
 import { updateUserSession } from '@/libs/dbManager';
 import { NextResponse } from 'next/server';
 

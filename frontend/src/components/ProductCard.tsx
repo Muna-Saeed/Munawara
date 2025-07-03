@@ -13,7 +13,7 @@ const ProductCard: React.FC<Props> = ({ product, onEdit, onDelete }) => {
     const [expanded, setExpanded] = useState(false);
 
     const toggleDescription = (e: React.MouseEvent) => {
-        e.stopPropagation(); // Prevent card-level events if any are added
+        e.stopPropagation();
         setExpanded(!expanded);
     };
 
@@ -53,7 +53,6 @@ const ProductCard: React.FC<Props> = ({ product, onEdit, onDelete }) => {
                     <span className="font-medium text-gray-500">Category: </span>
                     <span className="font-bold text-gray-800">{product.category}</span>
                 </div>
-                {/* ✅ The section displaying the old product.id has been removed */}
             </div>
 
             {/* Footer Section */}

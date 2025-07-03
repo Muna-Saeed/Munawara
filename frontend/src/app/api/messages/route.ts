@@ -1,6 +1,7 @@
 import { getMessages, insertMessage } from "@/libs/dbManager";
 import { NextResponse } from "next/server";
 import { Message } from 'next-auth';
+import { sendEmail } from "@/libs/senEmail";
 
 
 
@@ -32,6 +33,12 @@ export async function POST(req: Request) {
 
         // Save message using your DB manager
         await insertMessage(newMessage);
+        await sendEmail({
+            to: process.env.ADMIN_EMAIL as string,
+            cc: [process.env.CC_EMAIL as string],
+            subject: `New Contact Submission from ${name}`,
+            html: `<h1>New message from ${name}</h1><p>Email: ${email}</p><p>Message: ${message}</p>`,
+        });
 
         return NextResponse.json({ success: true, message: newMessage }, { status: 201 });
     } catch (error) {
