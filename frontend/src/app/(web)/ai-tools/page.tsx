@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Head from "next/head";
+import Chatbot from "@/components/Chatbot";
 
 export default function AITools() {
   const [input, setInput] = useState("");
@@ -156,6 +157,7 @@ export default function AITools() {
           </div>
         </div>
       </section>
+
     </>
   );
 }
