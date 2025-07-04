@@ -1,11 +1,5 @@
-// lib/sendEmail.ts
-
 import { Resend } from 'resend';
 
-// Instantiate Resend with your API key from environment variables
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-// Define the structure of the data our function will accept
 interface EmailOptions {
     to: string;
     subject: string;
@@ -14,14 +8,19 @@ interface EmailOptions {
     bcc?: string[];
 }
 
-/**
- * A reusable function to send emails using Resend.
- * @param {EmailOptions} options - The email options (to, subject, html).
- */
 export const sendEmail = async ({ to, subject, html, cc, bcc }: EmailOptions) => {
+    const apiKey = process.env.RESEND_API_KEY;
+    const from = process.env.EMAIL_FROM;
+
+    if (!apiKey || !from) {
+        throw new Error("Missing RESEND_API_KEY or EMAIL_FROM in environment variables");
+    }
+
+    const resend = new Resend(apiKey);
+
     try {
         const { data, error } = await resend.emails.send({
-            from: process.env.EMAIL_FROM as string,
+            from,
             to: [to],
             subject,
             html,
@@ -38,7 +37,6 @@ export const sendEmail = async ({ to, subject, html, cc, bcc }: EmailOptions) =>
         return data;
     } catch (error) {
         console.error('An unexpected error occurred in sendEmail:', error);
-        // Ensure the error is propagated
         throw error;
     }
 };
