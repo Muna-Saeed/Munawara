@@ -80,7 +80,7 @@ export default function Home() {
           </div>
           <div className="mt-10 flex justify-center">
             <Link
-              href="/https://docs.google.com/forms/d/e/1FAIpQLScI4A5j50eCKdTn3FPl9VxreHgOuRp4Wk3SupE_ltr8u70gMQ/viewform"
+              href="https://docs.google.com/forms/d/e/1FAIpQLScI4A5j50eCKdTn3FPl9VxreHgOuRp4Wk3SupE_ltr8u70gMQ/viewform"
               className="inline-flex items-center px-8 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow hover:bg-sky-700 hover:shadow-lg transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 text-lg"
             >
               Get Started
