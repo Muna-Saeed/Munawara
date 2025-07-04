@@ -31,10 +31,44 @@ declare module "next-auth" {
     }
 
     interface Message {
-        _id?: string;
+        _id: string;
         sender: [name: string, email: string];
         content: string;
         timestamp?: string;
+        read?: boolean | null;
+    }
+
+    interface UserWithSession {
+        id: string;
+        email: string;
+        name?: string | null;
+        image?: string | null;
+        provider?: string | null;
+        // Business-specific fields
+        role?: string | null;
+        company?: string | null;
+        location?: string | null;
+        phone?: string | null;
+        title?: string | null;
+        department?: string | null;
+        bio?: string | null;
+        industry?: string | null;
+        createdAt?: string | null;
+        socials?: {
+            linkedin?: string | null;
+            twitter?: string | null;
+            github?: string | null;
+        } | null;
+        session?: {
+            isOnline?: boolean;
+            lastActiveAt?: string;
+            ipAddress?: string;
+            userAgent?: string;
+            location?: {
+                city?: string;
+                country?: string;
+            };
+        } | null;
     }
 
     /**

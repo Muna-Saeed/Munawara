@@ -1,9 +1,12 @@
 import { getMessages, insertMessage } from "@/libs/dbManager";
 import { NextResponse } from "next/server";
-import { Message } from 'next-auth';
 import { sendEmail } from "@/libs/senEmail";
 
-
+interface Message {
+    sender: [name: string, email: string],
+    content: string,
+    timestamp?: string
+}
 
 export async function GET() {
     try {

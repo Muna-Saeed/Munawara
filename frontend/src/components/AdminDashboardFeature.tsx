@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Product, User } from 'next-auth';
+import { Product, UserWithSession as User } from 'next-auth';
 import { RefreshCcw } from 'lucide-react';
 
 import Orders from './Orders';
@@ -12,6 +12,8 @@ import LoadingSpinner from './LoadingSpinner';
 
 import { Message } from 'next-auth';
 import Products from './Products';
+
+
 
 export interface Order {
     _id: string;
@@ -131,6 +133,25 @@ const AdminDashboardFeature = () => {
         return <LoadingSpinner />;
     }
 
+    async function handleReadMessage(id: string): Promise<void> {
+        try {
+            const res = await fetch(`/api/messages/${id}`, {
+                method: 'PUT',
+            });
+
+            if (!res.ok) throw new Error('Failed to update message status');
+            setMessages((prev) =>
+                prev.map((msg) =>
+                    (msg as any).id === id || (msg as any)._id === id
+                        ? { ...msg, read: true }
+                        : msg
+                )
+            );
+        } catch (error) {
+            console.error('Failed to mark message as read:', error);
+        }
+    }
+
     return (
         <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
             <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
@@ -197,7 +218,7 @@ const AdminDashboardFeature = () => {
                     ) : activeTab === 'users' ? (
                         <Users users={users} onUpdateUser={(id) => setEditingUserId(id)} onDeleteUser={handleDeleteUser} />
                     ) : null}
-                    {activeTab === 'messages' && <Messages messages={messages} />}
+                    {activeTab === 'messages' && <Messages messages={messages} onMarkAsRead={handleReadMessage} />}
                     {activeTab === 'products' && <Products />}
                 </div>
             </div>

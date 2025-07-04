@@ -195,6 +195,25 @@ export async function UserSession(userSession: UserSessionType) {
     return await collection.insertOne(userSession);
 }
 
+export async function updateMessage(messageId: ObjectId) {
+    const client = await clientPromise;
+    const db = client.db("munawara");
+    const collection = db.collection('messages');
+
+    return await collection.updateOne(
+        { _id: messageId },
+        { $set: { read: true } }
+    );
+}
+
+export async function getUserSessions() {
+    const client = await clientPromise;
+    const db = client.db("munawara");
+    const collection = db.collection('userSessions');
+
+    return await collection.find({}).toArray();
+}
+
 export async function updateUserSession(userId: string, updates: Partial<UserSessionType>) {
     const client = await clientPromise;
     const db = client.db("munawara");
