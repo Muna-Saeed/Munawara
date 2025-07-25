@@ -60,21 +60,36 @@ const AdminDashboardFeature = () => {
         }
     };
 
-    const refreshData = () => {
+    const refreshData = async () => {
         setLoading(true);
-        fetchData<User[]>('/api/users', setUsers);
-        fetchData<Message[]>('/api/messages', setMessages);
-        fetch('/api/orders')
-            .then((res) => res.json())
-            .then((data: Order[]) => {
-                const uniqueOrders = Array.from(new Map(data.map((o) => [o._id, o])).values());
-                setLoading(false);
-                setOrders(uniqueOrders);
-            })
-            .catch((error) => {
-                console.error('Failed to fetch from /api/orders:', error);
-            });
+
+        try {
+            const [usersRes, messagesRes, ordersRes] = await Promise.all([
+                fetch('/api/users'),
+                fetch('/api/messages'),
+                fetch('/api/orders'),
+            ]);
+
+            const [usersData, messagesData, ordersData] = await Promise.all([
+                usersRes.json(),
+                messagesRes.json(),
+                ordersRes.json(),
+            ]);
+
+            setUsers(usersData);
+            setMessages(messagesData);
+
+            const uniqueOrders: Order[] = Array.from(
+                new Map((ordersData as Order[]).map((o: Order) => [o._id, o])).values()
+            );
+            setOrders(uniqueOrders);
+        } catch (error) {
+            console.error('Error refreshing data:', error);
+        } finally {
+            setLoading(false);
+        }
     };
+
 
     const handleOrderUpdate = async (id: string, status: string, feedback: string) => {
         try {

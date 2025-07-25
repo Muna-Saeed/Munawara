@@ -5,8 +5,21 @@ import { useSession } from 'next-auth/react';
 import ProfileSection from '@/components/ProfileSection';
 import ServiceHistory from '@/components/CustomerOrders';
 import NewServiceRequest from '@/components/NewServiceRequest';
-import { Service, Product } from 'next-auth';
+import { Service } from 'next-auth';
 import AdminDashboardFeature from '@/components/AdminDashboardFeature';
+
+// File: types/Product.ts (or src/types/Product.ts)
+
+export interface Product {
+    _id: string;
+    id?: string;
+    name: string;
+    description: string;
+    price: number;
+    category: string;
+    imageUrl?: string;
+    isActive: boolean;
+}
 
 const CustomerProfile = () => {
     const { data: session, status } = useSession();

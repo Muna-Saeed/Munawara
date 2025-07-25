@@ -167,13 +167,13 @@ declare module "next-auth" {
     }
 
     interface Product {
-        _id: string;
+        _id?: string;
         name: string;
         description: string;
         price: number;
         category: string;
         imageUrl?: string;
-        isActive?: boolean;
+        isActive: boolean;
         createdAt?: string;
         updatedAt?: string;
         createdBy?: string;

@@ -2,242 +2,186 @@
 import Image from 'next/image';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
 
-const categories = [
-  'Web Development',
-  'Mobile Apps',
-  'AI Solutions',
-  'E-Commerce',
-  'UI/UX Design',
-];
 
-const highlights = [
-  {
-    image: '/highlight1.jpg',
-    title: 'AI-Powered Analytics',
-    desc: 'A cutting-edge analytics platform that leverages AI for data insights.',
-    link: '#',
-  },
-  {
-    image: '/highlight2.jpg',
-    title: 'Mobile Banking App',
-    desc: 'A secure and user-friendly mobile banking application for a leading bank.',
-    link: '#',
-  },
-];
+const featuredProject = {
+  image: '/hotel-system.png',
+  title: 'Munawara Hotel Management System',
+  description:
+    'A comprehensive, enterprise-grade solution designed to streamline hotel operations. This system features real-time room booking, guest management, and a user-friendly interface for both staff and customers, demonstrating our ability to build complex, industry-specific applications.',
+  tags: ['Hospitality', 'Web Application', 'Booking Engine'],
+  liveLink: 'https://hotel-system-nine.vercel.app/',
+  caseStudyLink: 'https://hotel-system-nine.vercel.app/',
+};
 
 const projects = [
   {
-    image: '/project1.jpg',
-    title: 'E-Commerce Platform',
-    desc: 'A modern, responsive e-commerce site built for a local retailer.',
-    link: '#',
+    image: 'https://images.unsplash.com/photo-1599420186946-7b6fb4e297f0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80',
+    title: 'E-Commerce Platform for a Local Retailer',
+    description:
+      'A clean and responsive e-commerce platform designed to help a local business expand its reach. Features include product management, secure checkout, and a mobile-first design.',
     category: 'E-Commerce',
+    link: '#',
   },
   {
-    image: '/project2.jpg',
-    title: 'AI Chatbot',
-    desc: 'Developed an AI-powered chatbot to enhance customer support experiences.',
+    image: 'https://media.istockphoto.com/id/1479572879/photo/doctor-ai-artificial-intelligence-in-modern-medical-technology-and-iot-automation-doctor.webp?a=1&b=1&s=612x612&w=0&k=20&c=Ix3w4TBMqR_cnEutWumLXMA_w8t4IQBRXXIalsjlR_w=',
+    title: 'Appointment System for a Medical Clinic',
+    description:
+      'A patient-friendly booking system that allows users to schedule appointments online, reducing administrative workload and improving the patient experience.',
+    category: 'Healthcare',
     link: '#',
-    category: 'AI Solutions',
   },
-  // Add more projects as needed
+  {
+    // UPDATED: Real placeholder image URL
+    image: 'https://images.unsplash.com/photo-1677756119517-756a188d2d94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
+    title: 'AI-Powered Customer Support Chatbot',
+    description:
+      'An intelligent, AI-powered chatbot developed to enhance customer support by providing instant answers and resolving common issues automatically.',
+    category: 'AI Solutions',
+    link: '#',
+  },
 ];
 
+// --- Component Section ---
+
 export default function Portfolio() {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
-  const filteredProjects =
-    selectedCategory && selectedCategory !== 'All'
-      ? projects.filter((p) => p.category === selectedCategory)
-      : projects;
-
   return (
     <>
       <Head>
-        <title>Munawara - Our Portfolio</title>
+        <title>Our Work - Munawara</title>
         <meta
           name="description"
-          content="Explore Munawara's portfolio of projects, including web development, mobile apps, AI solutions, and more."
+          content="Explore the portfolio of Munawara. See our work in web development, e-commerce, and custom software solutions."
         />
       </Head>
-      <section className="min-h-screen bg-gray-100 text-gray-700 px-2 py-10 flex items-center justify-center">
-        <div className="w-full max-w-6xl bg-white rounded-xl shadow-2xl p-8 md:p-12">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
-            <div className="flex items-center gap-4">
-              <Image
-                src="/portfolio-overview.jpg"
-                alt="Circular portfolio overview image for Munawara"
-                width={64}
-                height={64}
-                className="rounded-full border-2 border-sky-700"
-                priority
-              />
-              <div>
-                <h1 className="text-4xl font-bold text-sky-800 mb-1">Our Portfolio</h1>
-                <p className="text-gray-600 text-lg">
-                  Explore our diverse range of projects that showcase our expertise and creativity.
+      <main className="bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+              Our Capabilities in Action
+            </h1>
+            <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-600">
+              We build professional, tailor-made digital solutions that solve real-world problems.
+              Explore some examples of our work below.
+            </p>
+          </div>
+
+          {/* Featured Project Section */}
+          <div className="mb-20">
+            <div className="group grid grid-cols-1 md:grid-cols-5 gap-8 items-center bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+              {/* Image */}
+              <div className="md:col-span-3">
+                <Image
+                  src={featuredProject.image}
+                  alt={`Screenshot of ${featuredProject.title}`}
+                  width={1600}
+                  height={1000}
+                  className="rounded-xl shadow-lg transform group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              {/* Details */}
+              <div className="md:col-span-2">
+                <h3 className="text-sm font-bold uppercase text-blue-600 tracking-wider">
+                  Featured Project
+                </h3>
+                <h2 className="text-3xl font-bold text-slate-900 mt-2">
+                  {featuredProject.title}
+                </h2>
+                <p className="text-slate-600 mt-4 text-base">
+                  {featuredProject.description}
                 </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {featuredProject.tags.map((tag) => (
+                    <span key={tag} className="inline-block bg-slate-100 text-slate-700 text-xs font-medium px-3 py-1 rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-8 flex items-center gap-4">
+                  <Link href={featuredProject.liveLink} passHref legacyBehavior>
+                    <a target="_blank" rel="noopener noreferrer" className="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold shadow-md hover:bg-blue-700 transition">
+                      View Live Demo
+                    </a>
+                  </Link>
+                  <Link href={featuredProject.caseStudyLink} passHref legacyBehavior>
+                    <a className="font-semibold text-blue-600 hover:text-blue-800">
+                      Read Case Study &rarr;
+                    </a>
+                  </Link>
+                </div>
               </div>
             </div>
-            <Link
-              href="#projects"
-              className="px-6 py-3 bg-sky-700 text-white rounded-lg font-semibold shadow hover:bg-sky-800 transition"
-            >
-              View All Projects
-            </Link>
           </div>
 
-          {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div className="p-6 bg-sky-50 rounded-lg shadow text-center">
-              <h3 className="text-3xl font-extrabold text-sky-800 mb-1">50+</h3>
-              <p className="text-gray-700">Projects Completed</p>
+          {/* Other Projects Section */}
+          <div>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-slate-900">
+                More of Our Work
+              </h2>
+              <p className="mt-3 max-w-xl mx-auto text-md text-slate-600">
+                Here are other examples demonstrating our versatility across different industries.
+              </p>
             </div>
-            <div className="p-6 bg-sky-50 rounded-lg shadow text-center">
-              <h3 className="text-3xl font-extrabold text-sky-800 mb-1">20+</h3>
-              <p className="text-gray-700">Happy Clients</p>
-            </div>
-            <div className="p-6 bg-sky-50 rounded-lg shadow text-center">
-              <h3 className="text-3xl font-extrabold text-sky-800 mb-1">10+</h3>
-              <p className="text-gray-700">Awards Won</p>
-            </div>
-          </div>
-
-          {/* Categories */}
-          <div className="flex flex-wrap gap-3 mb-10 justify-center">
-            <button
-              className={`px-4 py-2 rounded-lg font-semibold transition border ${
-                !selectedCategory
-                  ? 'bg-sky-700 text-white border-sky-700'
-                  : 'bg-white text-sky-700 border-sky-700 hover:bg-sky-50'
-              }`}
-              onClick={() => setSelectedCategory(null)}
-            >
-              All
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                className={`px-4 py-2 rounded-lg font-semibold transition border ${
-                  selectedCategory === cat
-                    ? 'bg-sky-700 text-white border-sky-700'
-                    : 'bg-white text-sky-700 border-sky-700 hover:bg-sky-50'
-                }`}
-                onClick={() => setSelectedCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Highlights */}
-          <div className="mb-10">
-            <div className="flex items-center gap-4 mb-4">
-              <Image
-                src="/portfolio-highlight.jpg"
-                alt="Portfolio highlight image for Munawara"
-                width={48}
-                height={48}
-                className="rounded-full border-2 border-sky-700"
-              />
-              <h2 className="text-2xl font-bold text-sky-800">Project Highlights</h2>
-            </div>
-            <p className="text-gray-600 mb-6">
-              Here are some of our standout projects that we are particularly proud of.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {highlights.map((h, idx) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.map((p) => (
                 <div
-                  key={h.title}
-                  className="group p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transition flex flex-col"
+                  key={p.title}
+                  className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden border border-slate-200"
                 >
-                  <Image
-                    src={h.image}
-                    alt={`Screenshot of ${h.title}`}
-                    width={500}
-                    height={320}
-                    className="mb-4 rounded-lg object-cover w-full h-48"
-                  />
-                  <h3 className="text-xl font-semibold mb-2 text-sky-800 group-hover:underline">
-                    {h.title}
-                  </h3>
-                  <p className="text-gray-700 mb-4 flex-1">{h.desc}</p>
-                  <Link
-                    href={h.link}
-                    className="inline-block px-4 py-2 bg-sky-700 text-white rounded-lg font-semibold hover:bg-sky-800 transition text-center"
-                  >
-                    View Project
-                  </Link>
+                  <div className="overflow-hidden">
+                    <Image
+                      src={p.image}
+                      alt={`Screenshot of ${p.title}`}
+                      width={800}
+                      height={500}
+                      className="object-cover w-full h-48 transform group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h3 className="text-sm font-semibold text-blue-600">
+                      {p.category}
+                    </h3>
+                    <h4 className="text-xl font-bold text-slate-800 mt-1 group-hover:text-blue-700">
+                      {p.title}
+                    </h4>
+                    <p className="text-slate-600 mt-2 flex-grow">
+                      {p.description}
+                    </p>
+                    <div className="mt-4">
+                      <Link href={p.link} passHref legacyBehavior>
+                        <a className="font-semibold text-blue-600 hover:text-blue-800">
+                          View Project Details &rarr;
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Projects */}
-          <div id="projects" className="mb-4">
-            <h2 className="text-2xl font-bold text-sky-800 mb-4">All Projects</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.length === 0 ? (
-                <div className="col-span-full text-center text-gray-500 py-8">
-                  No projects found in this category.
-                </div>
-              ) : (
-                filteredProjects.map((p) => (
-                  <div
-                    key={p.title}
-                    className="group p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transition flex flex-col"
-                  >
-                    <Image
-                      src={p.image}
-                      alt={`Screenshot of ${p.title}`}
-                      width={500}
-                      height={320}
-                      className="mb-4 rounded-lg object-cover w-full h-48"
-                    />
-                    <h3 className="text-xl font-semibold mb-2 text-sky-800 group-hover:underline">
-                      {p.title}
-                    </h3>
-                    <p className="text-gray-700 mb-4 flex-1">{p.desc}</p>
-                    <Link
-                      href={p.link}
-                      className="inline-block px-4 py-2 bg-sky-700 text-white rounded-lg font-semibold hover:bg-sky-800 transition text-center"
-                    >
-                      View Project
-                    </Link>
-                  </div>
-                ))
-              )}
+          {/* Call to Action */}
+          <div className="mt-20 text-center">
+            <h2 className="text-3xl font-bold text-slate-900">
+              Have a project in mind?
+            </h2>
+            <p className="mt-3 text-lg text-slate-600">
+              Let's build something great together.
+            </p>
+            <div className="mt-8">
+              <Link href="/contact" passHref legacyBehavior>
+                <a className="inline-block px-10 py-4 bg-blue-600 text-white rounded-lg font-semibold text-lg shadow-lg hover:bg-blue-700 transition">
+                  Start Your Project
+                </a>
+              </Link>
             </div>
           </div>
 
-          {/* Call to Action */}
-          <div className="mt-12 flex flex-col md:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="flex-1 px-6 py-3 bg-sky-700 text-white rounded-lg text-center font-semibold hover:bg-sky-800 transition"
-            >
-              Start Your Project
-            </Link>
-            <Link
-              href="/about"
-              className="flex-1 px-6 py-3 bg-white border border-sky-700 text-sky-700 rounded-lg text-center font-semibold hover:bg-sky-700 hover:text-white transition"
-            >
-              Learn More About Us
-            </Link>
-          </div>
         </div>
-      </section>
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(-8px);}
-          to { opacity: 1; transform: translateY(0);}
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease;
-        }
-      `}</style>
+      </main>
     </>
   );
 }

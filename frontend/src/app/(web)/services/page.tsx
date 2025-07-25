@@ -1,8 +1,26 @@
+'use client';
+
+import NewServiceRequest from "@/components/NewServiceRequest";
 import Head from "next/head";
 import Link from "next/link";
 import { FaCode, FaSearch, FaRobot, FaPuzzlePiece } from "react-icons/fa";
+import { useEffect, useState, useCallback } from "react";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
-const services = [
+// Centralized Product interface
+interface Product {
+  _id: string;
+  id?: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  imageUrl?: string;
+  isActive: boolean;
+}
+
+// Static descriptions for the top part of the page
+const staticPageServices = [
   {
     title: "Web Development",
     icon: <FaCode className="text-sky-700 w-8 h-8 mb-3" />,
@@ -26,39 +44,75 @@ const services = [
   },
 ];
 
-export default function Services() {
+export default function ServicesPage() {
+  const [availableServices, setAvailableServices] = useState<Product[]>([]);
+  const [loadingServices, setLoadingServices] = useState<boolean>(true);
+
+  // Function to fetch the dynamic service plans from your public API
+  const fetchAvailableServices = useCallback(async () => {
+    setLoadingServices(true);
+    try {
+      const res = await fetch('/api/available-services');
+      if (!res.ok) {
+        throw new Error(`Error fetching services: ${res.statusText}`);
+      }
+      const data: Product[] = await res.json();
+      // Filter to ensure only active services/plans are shown for selection
+      setAvailableServices(data.filter(service => service.isActive));
+    } catch (err) {
+      console.error('Failed to fetch available services:', err);
+      setAvailableServices([]);
+    } finally {
+      setLoadingServices(false);
+    }
+  }, []);
+
+  // Fetch the services when the component mounts
+  useEffect(() => {
+    fetchAvailableServices();
+  }, [fetchAvailableServices]);
+
   return (
     <>
       <Head>
         <title>Munawara - Services</title>
         <meta
           name="description"
-          content="Explore Munawara's range of digital services, including web development, SEO, and AI tools."
+          content="Explore Munawara's range of digital services, including web development, SEO, AI tools, and tailored business plans."
         />
       </Head>
       <section className="min-h-screen bg-gray-50 text-gray-800 py-10 px-4 md:px-10">
         <div className="max-w-5xl mx-auto">
           <header className="mb-10 text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-sky-800 mb-4 tracking-tight">
-              Our Services
+              Our Digital Services
             </h1>
-            <p className="text-lg md:text-xl text-gray-700 mb-2">
-              At Munawara, we empower small businesses, entrepreneurs, and professionals with affordable, scalable digital solutions.
-            </p>
-            <p className="text-lg md:text-xl text-gray-700 mb-2">
-              Our mission is to help you establish a strong online presence, enhance your brand visibility, and drive growth through innovative technology.
-            </p>
-            <p className="text-lg md:text-xl text-gray-700 mb-2">
-              Whether you need a stunning website, effective SEO strategies, or AI-powered tools, we have the expertise to help you succeed.
-            </p>
             <p className="text-lg md:text-xl text-gray-700">
               Explore our services below to find the perfect solution for your business needs.
             </p>
           </header>
 
-          {/* Services Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-            {services.map((service) => (
+          {/* --- Section for Dynamic Business Plans --- */}
+          <div className="mt-16 pt-16 border-t border-gray-200">
+            <h2 className="text-4xl md:text-5xl font-bold text-sky-800 mb-8 text-center tracking-tight">
+              Choose Your Business Plan
+            </h2>
+            {/* Conditional rendering: show loading spinner or the service request component */}
+            {loadingServices ? (
+              <LoadingSpinner />
+            ) : (
+              <NewServiceRequest
+                services={availableServices}
+                loading={loadingServices}
+                onRefresh={fetchAvailableServices}
+              />
+            )}
+          </div>
+          {/* --- End Dynamic Section --- */}
+
+          {/* --- Static Services Grid --- */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-gray-200">
+            {staticPageServices.map((service) => (
               <div
                 key={service.title}
                 className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-7 flex flex-col items-center text-center border border-gray-100"
@@ -76,7 +130,7 @@ export default function Services() {
             ))}
           </div>
 
-          {/* Custom Solutions */}
+          {/* --- Custom Solutions Section --- */}
           <div className="mt-16 flex justify-center">
             <div className="w-full md:w-2/3 bg-sky-800 text-white rounded-xl shadow-lg text-center p-8 relative overflow-hidden">
               <FaPuzzlePiece className="absolute left-6 top-6 text-sky-300 opacity-20 w-20 h-20 pointer-events-none hidden md:block" />

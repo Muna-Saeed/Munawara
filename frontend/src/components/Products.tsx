@@ -15,11 +15,11 @@ const Products = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await fetch('/api/available-services');
+            const res = await fetch('/api/available-services'); // Assuming this fetches both products and services
             const data: Product[] = await res.json();
             setProducts(data);
         } catch (err) {
-            console.error('Failed to fetch products:', err);
+            console.error('Failed to fetch products/services:', err);
         } finally {
             setLoading(false);
         }
@@ -32,6 +32,7 @@ const Products = () => {
     const handleDelete = async (id?: string) => {
         if (!id) return;
         try {
+            // Note: Your API endpoint is '/api/products/[id]/delete' - ensure it handles services too.
             await fetch(`/api/products/${id}/delete`, { method: 'DELETE' });
             setProducts((prev) => prev.filter((p) => p._id !== id));
         } catch (err) {
@@ -43,8 +44,8 @@ const Products = () => {
         try {
             const method = product._id ? 'PUT' : 'POST';
             const url = product._id
-                ? `/api/products/${product._id}`
-                : '/api/products';
+                ? `/api/products/${product._id}` // Ensure this endpoint can update services
+                : '/api/products'; // Ensure this endpoint can create services
 
             const res = await fetch(url, {
                 method,
@@ -54,7 +55,7 @@ const Products = () => {
 
             if (!res.ok) throw new Error('Failed to save');
 
-            await fetchProducts();
+            await fetchProducts(); // Re-fetch all products/services after save
         } catch (err) {
             console.error('Save failed:', err);
         } finally {
@@ -63,20 +64,20 @@ const Products = () => {
         }
     };
 
-    if (loading) return <LoadingSpinner />
+    if (loading) return <LoadingSpinner />;
 
     return (
         <div className="space-y-6">
-            {!editingProduct && (
+            {!showForm && ( // Only show the add button if the form is not visible
                 <div className="flex justify-between items-center">
                     <button
                         onClick={() => {
-                            setEditingProduct(null);
-                            setShowForm(true);
+                            setEditingProduct(null); // Ensure no product is being edited for a new entry
+                            setShowForm(true); // Show the form
                         }}
                         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-800"
                     >
-                        Add Product
+                        Add New Product/Service
                     </button>
                 </div>
             )}
@@ -92,19 +93,25 @@ const Products = () => {
                 />
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map((product) => (
-                    <ProductCard
-                        key={product._id}
-                        product={product}
-                        onEdit={() => {
-                            setEditingProduct(product);
-                            setShowForm(true);
-                        }}
-                        onDelete={() => handleDelete(product._id)}
-                    />
-                ))}
-            </div>
+            {/* Display Product Cards only if the form is not showing, or if products exist */}
+            {!showForm && products.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {products.map((product) => (
+                        <ProductCard
+                            key={product._id}
+                            product={product}
+                            onEdit={() => {
+                                setEditingProduct(product);
+                                setShowForm(true);
+                            }}
+                            onDelete={() => handleDelete(product._id)}
+                        />
+                    ))}
+                </div>
+            )}
+            {!showForm && products.length === 0 && !loading && (
+                <p className="text-center text-gray-500 mt-8">No products or services found. Click "Add New Product/Service" to get started!</p>
+            )}
         </div>
     );
 };
